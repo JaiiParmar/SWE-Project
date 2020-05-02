@@ -1,0 +1,108 @@
+html, body
+{
+  width: 100%;
+  height: 100%;
+}
+
+body
+{
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+}
+
+.app, .app-sidebar, .app-content
+{
+  height: 100%;
+}
+
+.app
+{
+  position: relative;
+  width: 100%;
+
+  &::before
+  {
+    content: "";
+    height: 100%;
+    float: left;
+  }
+
+  &::after
+  {
+    content: "";
+    clear: both;
+    display: block;
+  }
+
+  .app-body
+  {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .app-sidebar
+    {
+      background: $sidebar-background;
+      display: flex;
+      flex-flow: column nowrap;
+      float: left;
+      font-size: $sidebar-font-size;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      position: relative;
+      width: $sidebar-width;
+      max-width: $sidebar-width;
+      z-index: $zindex-fixed;
+      transition: width .3s;
+
+      &::-webkit-scrollbar
+      {
+        background-color: $sidebar-scrollbar;
+        width: $sidebar-scrollbar-width;
+      }
+
+      &::-webkit-scrollbar-thumb
+      {
+        background-color: $sidebar-scrollbar-thumb;
+      }
+
+      &::before
+      {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      @include breakpoint-down-to-sm
+      {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+
+        &.show
+        {
+          box-shadow: $sidebar-box-shadow;
+          width: 100%;
+
+          &::before
+          {
+            visibility: visible;
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .app-content
+    {
+      position: relative;
+      overflow: auto;
+    }
+  }
+}
