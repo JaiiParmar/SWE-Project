@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
   faculty: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "faculty",
   },
   program: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: String,
     ref: "program",
   },
   course: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: String,
     ref: "course",
   },
   created_at: {

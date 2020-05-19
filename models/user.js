@@ -2,12 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  name: {
-    type: String,
-    minlength: 3,
-    maxlength: 50,
-  },
-  email: {
+   _id: {
     type: String,
     maxlength: 50,
     required: true,
@@ -20,7 +15,12 @@ const userSchema = new Schema({
     required: true,
     //spedify reg-ex.
   },
-  user_type: {
+  name: {
+    type: String,
+    minlength: 3,
+    maxlength: 50,
+  },
+  role: {
     type: String,
     enum: ["admin", "faculty", "student"],
     required: true,
@@ -38,4 +38,4 @@ const userSchema = new Schema({
 });
 
 //Export model
-module.exports = mongoose.model("users", userSchema);
+module.exports = mongoose.model("user", userSchema);

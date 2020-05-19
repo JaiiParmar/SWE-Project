@@ -3,26 +3,26 @@ const Schema = mongoose.Schema;
 
 const questionPaperSchema = new Schema({
   faculty: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "faculty",
   },
   program: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: String,
     ref: "program",
   },
   course: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: String,
     ref: "course",
   },
   created_at: {
     type: Date,
     default: Date.now(),
   },
-  Questions: [
-    ,/** ...Array of Questions... */
-  /** ...file(pdf, word, etc..)*/
-  ],
-  total_question: {
+  // Questions: [
+  //   ,/** ...Array of Questions... */
+  // /** ...file(pdf, word, etc..)*/
+  // ],
+   total_question: {
     type: Number,
     required: true,
   },
@@ -53,4 +53,4 @@ const questionPaperSchema = new Schema({
 });
 
 //Export model
-module.exports = mongoose.model("question-paper", questionPaperSchema);
+module.exports = mongoose.model("questionPaper", questionPaperSchema);

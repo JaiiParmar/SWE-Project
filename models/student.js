@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const studentSchema = new Schema({
-    user: {
-        type: mongoose.Types.Schema.ObjectId,
+    user_info: {
+        type: String,
         ref: 'user',
     },
     program: {
-        type: mongoose.Types.Schema.ObjectId,
+        type: String,
         ref:'program'
     },
     batch:{
