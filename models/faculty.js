@@ -2,26 +2,24 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const facultySchema = new Schema({
-    user_info: {
+    _id: {
         type: String,
         ref: 'user',
     },
-    teaches_in: [
-            {
-                program: {
-                    type: String,
-                    ref: 'program',
-                    default: null,
-                },
-                courses: [
-                    {
-                        type: String,
-                        ref: 'course',
-                        unique: true,
-                        default: null,
-                    }
-                ],
+    classes: [
+        {
+            program: {
+                type: String,
+                ref: 'program',
+                default: null,
             },
+            course:
+            {
+                type: String,
+                ref: 'course',
+                default: null,
+            },
+        },
         ],
 });
 

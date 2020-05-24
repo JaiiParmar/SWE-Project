@@ -1,53 +1,98 @@
-require('./models/db')
-const express = require('express');
 const path = require("path");
+
+const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
-const session = require('client-sessions');
-const User = mongoose.model('user');
+const User = require('./models/user');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
+//const errorController = require('./controllers/error');
+
+//const csrf = require("csurf");
+const flash = require("connect-flash");
+
+const host = "localhost";
+const port = "27017";
+const db = "paper_generator"; // database name
+//set url
+
+const MONGODB_URI = `mongodb://${host}:${port}/${db}`;
 const app = express();
+//const csrfProtection = csrf();
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+});
 
 //Set template engine as ejs
 app.use(expressLayouts);
 app.set('view engine' , 'ejs');
 app.use(express.static(__dirname + '/public'));
 
+const authRoutes = require("./routes/auth");
+const adminRoutes = require('./routes/admin');
+const facultyRoutes = require('./routes/faculty');
+const errorController = require('./controllers/error')
+
 //body-parser
 app.use(bodyparser.urlencoded({
   extended: true
 }));
 app.use(bodyparser.json());
+//app.use(csrfProtection);
+app.use(flash());
 
-// session
-app.use(session({
-  cookieName: 'session',
-  secret: 'secret',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
-}));
-
-// checking sessions exists
-app.use(function(req, res, next) {
-  if (req.session && req.session.user) {
-    User.findOne({ _id: req.session.user._id }, function(err, user) {
-      if (user) {
-        req.user = user;
-        delete req.user.password; // delete the password from the session
-        req.session.user = user;  //refresh the session value
-        res.locals.user = user;
-      }
-      // finishing processing the middleware and run the route
-      next();
-    });
-  } else {
-    next();
+app.use(
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
   }
+  User.findById(req.session.user._id)
+    .then((user) => {
+      req.user = user;
+      res.locals.user = {
+        role : user.role,
+        email : user._id,
+        name : user.name
+      }
+     //console.log(res.locals.user);
+      next();
+    })
+    .catch((err) => console.log(err));
 });
 
-//Routes
-app.use('/',require('./routes/index.js'));
-app.use('/user',require('./routes/user.js'));
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;  //to use with every request.
+  //res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+app.use('/', adminRoutes);
+app.use('/', authRoutes);
+app.use('/', facultyRoutes);
+
+//if no routes found.
+// app.use(errorController.get404);
+
+mongoose
+  .connect(MONGODB_URI, { useUnifiedTopology: true, useCreateIndex: true,useNewUrlParser: true })
+  .then(result => {         //if database is connected.
+    //Start the SERVER
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, console.log(`Server started on port ${PORT}`))
+  })
+  .catch(err => {
+    console.error();
+    (err);
+});
+
+

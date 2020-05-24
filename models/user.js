@@ -11,7 +11,7 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    maxlength: 50,
+    maxlength: 100,
     required: true,
     //spedify reg-ex.
   },

@@ -30,7 +30,7 @@ const programSchema = new Schema({
   ],
   active: {
     type: Boolean,
-    defualt: true,
+    default: true,
   },
   created_at: {
     type: Date,

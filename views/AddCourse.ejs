@@ -1,21 +1,21 @@
 <%- include('partials/headerAdmin.ejs') %>
-
 <div align="center">
-	<form class="contact1-form validate-form" align="left" action="addCourses" method="post">
+	<form class="contact1-form validate-form" align="left" action="addCourse" method="post">
 					<span class="contact1-form-title">
 						Add Course
 					</span>
-	
+					
+
 					<div class="wrap-input1 validate-input" data-validate = "Course code is required">
 						<input class="input1" type="text" name="ccode" placeholder="Course code" required="required>
 						<span class="shadow-input1"></span>
 					</div>
-					
+
 					<div class="wrap-input1 validate-input" data-validate = "Course Name is required">
 						<input class="input1" type="text" name="cname" placeholder="Course Name" required="required>
 						<span class="shadow-input1"></span>
 					</div>
-					
+
 					<div class="container-contact1-form-btn">
 						<button class="contact1-form-btn" >
 							<span>
@@ -24,11 +24,6 @@
 							</span>
 						</button>
 					</div>
-					<%= message %>
 				</form>
 				</div>
-	
-	
-	
-	
 	</div></div></div>

@@ -1,25 +1,24 @@
 <%- include('partials/headerAdmin.ejs') %>
+
 <div align="center">
-	<form class="contact1-form validate-form" align="left" action="addprogram" method="post">
+	<form class="contact1-form validate-form" align="left" action="addProgram" method="post">
 					<span class="contact1-form-title">
 						Add Program
 					</span>
-	
-					
+						<div class="wrap-input1 `validate-input" data-validate = "Program Id is required">
+						<input class="input1" type="text" name="pid" placeholder="Program ID">
+						<span class="shadow-input1"></span>
+					</div>
+
 					<div class="wrap-input1 validate-input" data-validate = "Program Name is required">
 						<input class="input1" type="text" name="pname" placeholder="Program Name">
 						<span class="shadow-input1"></span>
 					</div>
-					
 					<div class="wrap-input1 validate-input" data-validate = "required: ex: 3">
 						<input class="input1" type="text" name="duration" placeholder="Duration in Years">
 						<span class="shadow-input1"></span>
 					</div>
-					
-					
-					
-					
-					<!--<tr><td colspan=2></td></tr>
+					<tr><td colspan=2></td></tr>
 					<tr>
 					<td colspan=2>
 					<div class="wrap-input1 validate-input" data-validate = "Message is required">
@@ -32,21 +31,14 @@
 						</select>
 						<span class="shadow-input1"></span>
 					</div></td></tr>-->
-					
-					
 					<div class="container-contact1-form-btn">
-						<button class="contact1-form-btn" onclick="addprogram">
+						<button type="submit" class="contact1-form-btn" onclick="addprogram">
 							<span>
 								ADD
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
 						</button>
 					</div>
-					<%= message %>
-				</form>
+					</form>
 				</div>
-	
-	
-	
-	
 	</div></div></div>
