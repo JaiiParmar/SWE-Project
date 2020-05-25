@@ -19,8 +19,9 @@ const facultySchema = new Schema({
                 ref: 'course',
                 default: null,
             },
+            topics:[String]
         },
-        ],
+    ],
 });
 
 //Export model

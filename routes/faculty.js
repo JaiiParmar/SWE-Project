@@ -14,14 +14,22 @@ router.get("/getCreateClass", isAuth, facultyController.getCreateClass);
 
 router.post("/createClass", isAuth, facultyController.createClass);
 
-router.get('/listTopics/:fid/:cid', isAuth, facultyController.listTopics);
+router.get('/listTopics/:cid', isAuth, facultyController.listTopics);
 
 router.get("/listClasses", isAuth, facultyController.getListClass);
 
 router.get("/classDetails/:id", isAuth, facultyController.getDetailsClass);
 
-router.get("/getCreateTopic", isAuth, facultyController.getCreateTopic);
+router.get("/getCreateTopic/:cid", isAuth, facultyController.getCreateTopic);
 
-router.post("/createTopic", isAuth, facultyController.createTopic);
+router.post("/createTopic/:cid", isAuth, facultyController.createTopic);
+
+router.get("/getTopicDetails/:cid/:tid", isAuth, facultyController.getTopicDetails);
+
+router.post("/updateTopic/:cid/:tid", isAuth, facultyController.updateTopic);
+
+router.get("/deleteTopic/:cid/:tid", isAuth, facultyController.deleteTopic);
+
+
 
 module.exports = router;

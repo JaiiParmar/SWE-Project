@@ -38,12 +38,13 @@ exports.getCreateClass = (req, res, next) => {
         })
 }
 
-//create class in the Database.
+//create class in the Database by Updating the faculty table..
 exports.createClass = (req, res, next) => {
 
     const id = req.body.fid;
     const programId = req.body.fprogram;
     const courseId = req.body.fcourse;
+
     //make sure that the entry is unique.
     Faculty.findByIdAndUpdate(id,
         {
@@ -62,15 +63,17 @@ exports.createClass = (req, res, next) => {
         .catch(error => {
             console.log(`Error Creating Class : ${error.message}`);
         });
-};
+
+}
 
 
-//provide create class page.
+//provide List class page.
 exports.getListClass = (req, res, next) => {
-    let message = null;
-    const id = req.user._id;
 
-    Faculty.findByIdAndUpdate(id)
+    let message = null;
+    const id = req.user._id;    //user Id.
+
+    Faculty.findById(id)
         .then(classes => {
             if (!classes)
                 message = 'No Classes! '
@@ -82,65 +85,34 @@ exports.getListClass = (req, res, next) => {
             message = "Opps! Something's wrong! Please try again later."
             res.render('noData', { message : message })
         });
-    // Program.find({}).exec()
-    //     .then((programs) => {
-    //         if (!programs)
-    //             message = message + 'No Programs! '
-
-    //         Course.find({}).exec()
-    //             .then((courses) => {
-    //                 if (!courses) {
-    //                     message = message + 'No Courses!'
-    //                 }
-    //                 res.render('createClass', {
-    //                     message: message + "OK",
-    //                     courses: courses,
-    //                     programs: programs,
-    //                 })
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //                 res.render('noData', {
-    //                     message: "Opps!Something's Wrong! Please Try again later."
-    //                 })
-    //             })
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //         res.render('noData', {
-    //             message: "Opps!Something's Wrong! Please Try again later."
-    //         })
-    //     })
 }
 
+
+//get Class Details...
 exports.getDetailsClass = (req, res, next) => {
 
     let message = null;
     const id = req.user._id;
-    const classId =  req.params.id
-    Faculty.find({"_id":id})
+    const classId = req.params.id
+
+    Faculty.findById(id)
         .then(mClass => {
             if (!mClass) {
                 console.log(mClass);
                 message = 'No Classes'
             }
-            // const mClasses = mClass
-            // for (let x of mClass.classes)
-            // {
-            //     if (x._id === classId.iid)
-            //         console.log(x);
-            // }
-            // console.log("Over");
-
-            // console.log("RES : ",mClasses);
-
+            let mmClass = null;
+            for (let i = 0; mClass.classes[i]; i++) {
+                if (String(mClass.classes[i]._id) === classId)
+                    mmClass = mClass.classes[i];
+            }
             res.render('classDetails', {
                 mClass: {
                     fid:id,
                     cid: classId,
-                    program: "MScIt",
-                    course: "C++",
-                    topics: ["Pointers", "Array", "Memory"]
+                    program: mmClass.program,
+                    course: mmClass.course,
+                    topics:mmClass.topics,
                 }
             });
         })
@@ -152,24 +124,185 @@ exports.getDetailsClass = (req, res, next) => {
 }
 
 exports.listTopics = (req, res, next) => {
-    res.render('listTopics', {
-        mClass: {
-            program: "MScIT",
-            course: "C++",
-            topics: ["Pointers", "Array", "Memory"]
-        }
-    })
+
+    let message = null;
+    const id = req.user._id;
+    const classId = req.params.cid
+
+    Faculty.findById(id)
+        .then(mClass => {
+            if (!mClass) {
+                console.log(mClass);
+                message = 'No Classes'
+            }
+            let mmClass = null;
+            for (let i = 0; mClass.classes[i]; i++) {
+                if (String(mClass.classes[i]._id) === classId)
+                    mmClass = mClass.classes[i];
+            }
+            res.render('listTopics', {
+                mClass: {
+                    classId: classId,
+                    program: mmClass.program,
+                    course: mmClass.course,
+                    topics: mmClass.topics,
+                }
+            });
+        })
+        .catch(error => {
+            console.log(`Error Fetching Class : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { message: message })
+        });
 }
 
 exports.getCreateTopic = (req, res, next) => {
-    res.render('createTopic', {
-        mClass: {
-            program: "MScIT",
-            course: "C++",
-        }
-    })
-}
+    const id = req.user._id;
+    const classId = req.params.cid;
+    Faculty.findById(id)
+        .then(mClass => {
+            if (!mClass) {
+                console.log(mClass);
+                message = 'No Classes'
+            }
+            let program = null;
+            let course = null;
+            for (let i = 0; mClass.classes[i]; i++) {
+                if (String(mClass.classes[i]._id) === classId) {
+                    program = mClass.classes[i].program;
+                    course = mClass.classes [i].course;
+                }
+            }
 
+            res.render('createTopic', {
+                mClass: {
+                    classId: classId,
+                    program: program,
+                    course: course
+                }
+            })
+        })
+        .catch(error => {
+            console.log(`Error Fetching Class : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { message: message })
+        });
+}
 exports.createTopic = (req, res, next)=>{
     //code for adding data in the database.
+
+    const id = req.user._id
+    const classId = req.params.cid
+    const topic = req.body.tname
+
+    //make sure that the entry is unique.
+    Faculty.updateOne({ "_id": id, "classes._id": classId },
+        {
+            "$push": {
+                "classes.$.topics": topic
+            }
+        }
+    )
+        .then(result => {
+            console.log("Topic Added  -> " + topic);
+            //this.getProgramDetails(req, res, next);
+            const mRoutes ='/listTopics/' + classId
+            res.redirect(mRoutes);
+        })
+        .catch(error => {
+            console.log(`Error Creating Class : ${error.message}`);
+        });
+}
+
+exports.getTopicDetails = (req, res, next) => {
+    const id = req.user._id;
+    const classId = req.params.cid;
+    const topic = req.params.tid;
+
+    Faculty.findById(id)
+        .then(mClass => {
+            if (!mClass) {
+                console.log(mClass);
+                message = 'No Classes'
+            }
+            let program = null;
+            let course = null;
+            for (let i = 0; mClass.classes[i]; i++) {
+                if (String(mClass.classes[i]._id) === classId) {
+                    program = mClass.classes[i].program;
+                    course = mClass.classes [i].course;
+                }
+            }
+            res.render('topicDetails', {
+                mTopic: {
+                    classId: classId,
+                    program: program,
+                    course: course,
+                    topic:topic
+                }
+            })
+        })
+        .catch(error => {
+            console.log(`Error Fetching Class : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { message: message })
+        });
+}
+
+
+exports.updateTopic = (req, res, next) => {
+    const id = req.user._id
+    const classId = req.params.cid
+    const topic = req.params.tid
+    const newTopic = req.body.tname
+    console.log(topic, newTopic);
+    
+        Faculty.updateOne({ "_id": id, "classes._id": classId },
+            {
+                "$pull": {
+                    "classes.$.topics": topic
+                }
+            }
+        )
+        .then(result => {
+            //make sure that the entry is unique.
+            Faculty.updateOne({ "_id": id, "classes._id": classId },
+                {
+                    "$push": {
+                        "classes.$.topics": newTopic
+                    }
+                }
+            )
+            .then(result => {
+                this.listTopics(req, res, next);
+            })
+            .catch(error => {
+                console.log(`Error Creating Class : ${error.message}`);
+            });
+        })
+        .catch(error => {
+            console.log(`Error Creating Class : ${error.message}`);
+        });
+}
+
+exports.deleteTopic = (req, res, next) => {
+
+    const id = req.user._id
+    const classId = req.params.cid
+    const topic = req.params.tid
+    //make sure that the entry is unique.
+    Faculty.updateOne({ "_id": id, "classes._id":classId },
+        {
+             "$pull": {
+                "classes.$.topics": topic
+            }
+        }
+    )
+        .then(result => {
+            console.log("Topic Deleted  -> " + topic);
+            this.listTopics(req, res, next);
+        })
+        .catch(error => {
+            console.log(`Error Creating Class : ${error.message}`);
+        });
 }
