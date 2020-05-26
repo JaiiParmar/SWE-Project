@@ -5,9 +5,12 @@ const isAuth = require("../middleware/is-auth");
 const express = require("express");
 
 const facultyController = require("../controllers/faculty-controller");
+const questionBankController = require("../controllers/question-bank-controller");
 
 const router = express.Router();
 
+//***********************************************************************************/
+                /** CRUD Class and CRUD Topics */
 //***********************************************************************************/
 
 router.get("/getCreateClass", isAuth, facultyController.getCreateClass);
@@ -31,5 +34,22 @@ router.post("/updateTopic/:cid/:tid", isAuth, facultyController.updateTopic);
 router.get("/deleteTopic/:cid/:tid", isAuth, facultyController.deleteTopic);
 
 
+
+//***********************************************************************************/
+                /** CRUD Questions... */
+//***********************************************************************************/
+
+
+router.get("/getCreateQuestion/:classId", isAuth, questionBankController.getCreateQuestion);
+
+router.post("/createQuestion/:classId", isAuth, questionBankController.createQuestion)
+
+router.get("/listQuestions/:classId", isAuth, questionBankController.getListQuestions);
+
+router.get("/questionDetails/:questionId", isAuth, questionBankController.getDetailsQuestions);
+
+router.post("/updateQuestion/:questionId", isAuth, questionBankController.updateQuestion);
+
+router.get("/deleteQuestion/:questionId/:classId", isAuth, questionBankController.deleteQuestion);
 
 module.exports = router;

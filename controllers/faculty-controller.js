@@ -4,6 +4,13 @@ const Course = require('../models/course');
 const Program = require('../models/program');
 
 
+
+
+//***********************************************************************************/
+/** C-R-U-D Class and Topics */
+//***********************************************************************************/
+
+
 //provide create class page.
 exports.getCreateClass = (req, res, next) => {
     const message = '';
@@ -256,7 +263,7 @@ exports.updateTopic = (req, res, next) => {
     const topic = req.params.tid
     const newTopic = req.body.tname
     console.log(topic, newTopic);
-    
+
         Faculty.updateOne({ "_id": id, "classes._id": classId },
             {
                 "$pull": {
@@ -306,3 +313,7 @@ exports.deleteTopic = (req, res, next) => {
             console.log(`Error Creating Class : ${error.message}`);
         });
 }
+
+
+
+

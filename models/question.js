@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
   faculty: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "faculty",
   },
   program: {
@@ -13,6 +13,12 @@ const questionSchema = new Schema({
   course: {
     type: String,
     ref: "course",
+  },
+  class: {
+    type: String,
+  },
+  topic: {
+    type:String
   },
   created_at: {
     type: Date,
@@ -38,20 +44,10 @@ const questionSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ["theory", "MCQ", "true/false", "yes/no" /**or any other*/],
+    enum: ["theory", "mcq", "true/false", "yes/no" /**or any other*/],
     default: "theory",
   },
-  options: {
-    type: Array,
-    required: function () {
-      return this.type !== "theory";
-    },
-    default: function () {
-      if (this.type === "true/false") return ["true", "false"];
-      if (this.typp === "yes/no") return ["yes", "no"];
-      return undefined;
-    },
-  },
+  options:[String],
   answer: {
     type: String,
   },
