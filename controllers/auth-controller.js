@@ -49,11 +49,11 @@ exports.postLogin = (req, res, next) => {
             });
           }
           req.flash("error", "Invalid email or password.");
-          res.redirect("/login");
+          res.redirect("/");
         })
         .catch((err) => {
           console.log(err);
-          res.redirect("/login");
+          res.redirect("/");
         });
     })
     .catch((err) => console.log(err));

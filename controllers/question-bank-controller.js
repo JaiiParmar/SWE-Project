@@ -3,7 +3,6 @@
 const Faculty = require("../models/faculty");
 const Question = require("../models/question");
 
-
 //***********************************************************************************/
 /** C-R-U-D Questions... */
 //***********************************************************************************/
@@ -91,7 +90,7 @@ exports.createQuestion = (req, res, next) => {
         topic: topic,
         text: question,
         note: note,
-        difficutly: difficutly,
+        difficulty: difficutly,
         mark: mark,
         type: type,
         options: options,
@@ -122,10 +121,13 @@ exports.getListQuestions = (req, res, next) => {
                 console.log(mQuestions);
                 message = 'No Questions'
             }
-            console.log(mQuestions);
+            console.log(mQuestions[3].options);
 
+            // res.render('listQuestions', {
+            //     mQuestions: mQuestions
+            // });
             res.render('listQuestions', {
-                mQuestions: mQuestions
+                 mQuestions: mQuestions
             });
         })
         .catch(error => {
@@ -136,6 +138,7 @@ exports.getListQuestions = (req, res, next) => {
 }
 
 exports.getDetailsQuestions = (req, res, next) => {
+
     const questionId = req.params.questionId;
     const facId = req.user._id;
     let topics = null;
@@ -249,3 +252,5 @@ exports.deleteQuestion = (req, res, next) => {
             res.render('noData', { message: message })
         });
 }
+
+

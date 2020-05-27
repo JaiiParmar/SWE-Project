@@ -6,6 +6,7 @@ const express = require("express");
 
 const facultyController = require("../controllers/faculty-controller");
 const questionBankController = require("../controllers/question-bank-controller");
+const questionPaperController = require("../controllers/question-paper-controller");
 
 const router = express.Router();
 
@@ -39,7 +40,6 @@ router.get("/deleteTopic/:cid/:tid", isAuth, facultyController.deleteTopic);
                 /** CRUD Questions... */
 //***********************************************************************************/
 
-
 router.get("/getCreateQuestion/:classId", isAuth, questionBankController.getCreateQuestion);
 
 router.post("/createQuestion/:classId", isAuth, questionBankController.createQuestion)
@@ -51,5 +51,22 @@ router.get("/questionDetails/:questionId", isAuth, questionBankController.getDet
 router.post("/updateQuestion/:questionId", isAuth, questionBankController.updateQuestion);
 
 router.get("/deleteQuestion/:questionId/:classId", isAuth, questionBankController.deleteQuestion);
+
+
+
+
+
+//***********************************************************************************/
+/** CRUD Questions Paper... */
+//***********************************************************************************/
+
+
+router.get('/getGenerateQuestionpaper/:classId', isAuth, questionPaperController.getGenerateQuestionPaper)
+
+router.post('/generateQuestionPaper/:classId', isAuth, questionPaperController.generateQuestionPaper)
+
+
+
+//***********************************************************************************/
 
 module.exports = router;

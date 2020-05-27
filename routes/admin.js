@@ -10,9 +10,6 @@ const userController = require("../controllers/user-controller");
 const router = express.Router();
 
 
-
-
-
 //*********************************************************************************** */
                     /**Program Routes */
 
@@ -35,8 +32,6 @@ router.get('/getShowProgram/deleteProgram/:id', isAuth,  adminController.deleteP
 
 //Update a Program
 router.post('/getShowProgram/updateProgram/:id', isAuth, adminController.updateProgram);
-
-
 
 
 
@@ -86,7 +81,7 @@ router.get("/listFaculty", isAuth, adminController.listFaculty);
 router.post("/addFaculty", isAuth, userController.addFaculty);
 
 // a Single Faculty Details.
-router.get("/getShowFaculty/:   id", isAuth, userController.getUserDetails);
+router.get("/getShowFaculty/:id", isAuth, userController.getUserDetails);
 
 // Detele a Faculty.
 router.get('/getShowFaculty/deleteFaculty/:id', isAuth, userController.deleteUser);
@@ -94,6 +89,6 @@ router.get('/getShowFaculty/deleteFaculty/:id', isAuth, userController.deleteUse
 // Update a Faculty.
 router.post('/getShowFaculty/updateFaculty/:id', isAuth, userController.updateUser);
 
-    
+
 //exports the routes
 module.exports = router;

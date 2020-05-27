@@ -119,9 +119,9 @@
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2><%=mQuestions[0].program%><b> <%=mQuestions[0].course%> </b> || Questions </h2></div>
+                    <div class="col-sm-8"><h2><%=mQuestions[0].program%><b> <%=mQuestions[0].course%> </b> || Questions Paper - Review</h2></div>
                     <div class="col-sm-4">
-                        <a href="/getCreateQuestion/<%=mQuestions[0].class%>"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add New</button></a>
+                        <a href="#"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add New</button></a>
                     </div>
                 </div>
             </div>
@@ -130,11 +130,10 @@
                         <tr>
                             <th style="background-color: #2e8cc2; opacity:0.9; width:50px">ID</th>
                             <th style="background-color: #2e8cc2; opacity:0.9">Question</th>
-                            <th style="background-color: #2e8cc2; opacity:0.9">Actions</th>
+                            <th style="background-color: #2e8cc2; opacity:0.9">Remove</th>
                         </tr>
                     </thead>
                     <tbody>
-
                          <% for(var i=0; i < mQuestions.length; i++) {  %>
                             <tr>
                             <td><%= i+1 %></td>
@@ -143,17 +142,19 @@
                                     <div class="question">
                                         <p><%= mQuestions[i].text %></p>
                                     </div>
+                                    <div class="question">
+                                        <p><%= mQuestions[i].note %></p>
+                                    </div>
                                     <div class="question-opt">
                                         <ul class="opts">
                                             <li><%= mQuestions[i].difficulty %></li>
                                             <li><%= mQuestions[i].mark %></li>
-                                            <li><%= mQuestions[i].topic %></li>
                                             <li><%= mQuestions[i].type %></li>
-                                            <!-- <% if(mQuestions[i].type === 'mcq') {%>
+                                            <li><%= mQuestions[i].topic %></li>
+                                            <!-- <% if(mQuestions[i].type !== 'theory') {%>
                                                  <li>
                                                     <select>
-                                                        <option value="">Options</option>
-                                                    <% for(var j=0;mQuestions[i].options[j]; j++) {  %>
+                                                    <% for(var j=0; j < mQuestions[i].options[j]; j++) {  %>
                                                         <option><%= mQuestions[i].options[j] %></option>
                                                      <% }%>
                                                     </select>
