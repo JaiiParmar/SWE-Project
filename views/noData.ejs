@@ -3,7 +3,6 @@
     <%- include('partials/headerAdmin.ejs') %>
 <%}%>
 
-
 <% if(user.role === "faculty"){%>
 <%- include('partials/headerFaculty.ejs') %>
 <%}%>
@@ -13,4 +12,6 @@
 <%}%>
 
 
-<h1 align="center"><%= message %></h1>
+<h1 align="center">
+    <%= feedBack %>
+</h1>

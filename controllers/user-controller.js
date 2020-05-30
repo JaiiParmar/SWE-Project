@@ -4,23 +4,29 @@ const nodemailer = require('nodemailer');
 
 const User = require('../models/user');
 const Faculty = require('../models/faculty');
+const Student = require('../models/student');
 
 // Add faculty and send email.
-exports.addFaculty = (req, res, next) => {
+exports.addUser = (req, res, next) => {
     //const confirmPassword = req.body.confirmPassword;
-    const id = req.body.facEmail
-    const password = req.body.facPass
-    const name = req.body.facName
-    const role = req.body.facRole
+    const id = req.body.email
+    const password = req.body.pass
+    const name = req.body.name
+    const role = req.body.role
+    const program = req.params.pid
+
 
     User.findOne({ _id: id })
         .then((userDoc) => {
             if (userDoc) {
                 req.flash(
                     "error",
-                    "E-Mail exists already, please pick a different one."
+                    "E-Mail exists already."
                 );
-                return res.redirect("/getAddFaculty");
+                if (role === 'faculty')
+                    res.redirect("/getAddFaculty");
+                else
+                    res.redirect('/getAddStudent/' + program)
             }
             return bcrypt
                 .hash(password, 12)
@@ -31,14 +37,30 @@ exports.addFaculty = (req, res, next) => {
                         role: role,
                         name: name
                     });
-                    Faculty({ _id: id })
-                        .save().catch((err) => {
-                            console.log(err);
-                            res.render('error',
-                                {
-                                    message: "Ooops! Something's Wrong! Try again later."
-                                })
-                    })
+                    if (role === 'faculty') {
+                        //add reference to facutly
+                        Faculty({ _id: id })
+                            .save().catch((err) => {
+                                console.log(err);
+                                req.flash(
+                                    "error",
+                                    "Couldn't add faculty! Please try again!"
+                                );
+                                return res.redirect('/getAddFaculty')
+                            })
+                    }
+                    else if (role === 'Student') {
+                        //add reference to facutly
+                        Student({ _id: id, program:program})
+                            .save().catch((err) => {
+                                console.log(err);
+                                req.flash(
+                                    "error",
+                                    "Couldn't add student! Please try again!"
+                                );
+                                return res.redirect('/getAddStudent/' + program)
+                            })
+                    }
                     return user.save();
                 })
                 .then((result) => {
@@ -65,37 +87,85 @@ exports.addFaculty = (req, res, next) => {
                     //         console.log('email sent to : ' + id);
                     //     }
                     // });
-                    res.redirect("/getAddFaculty");
+                    if (role === 'faculty') {
+                        req.flash(
+                            "info",
+                            "Faculty Added!"
+                        );
+                        res.redirect("/getAddFaculty");
+                    }
+                    else {
+                        req.flash(
+                            "info",
+                            "Student Added!"
+                        );
+                        res.redirect('/getAddStudent/' + program)
+                    }
                 })
         })
         .catch((err) => {
             console.log(err);
-            res.render('error', {message :"Ooops! Something's Wrong! Try again later."})
+
+            if (role === 'faculty') {
+                req.flash(
+                    "error",
+                    "Couldn't add Facutly! Please try again!"
+                );
+                res.redirect("/getAddFaculty");
+            }
+            else {
+                req.flash(
+                    "error",
+                    "Couldn't add student! Please try again!"
+                );
+                res.redirect('/getAddStudent/' + program)
+            }
         });
 };
 
-//Get Single User.
-exports.getUserDetails = (req, res, next) => {
+//Get Single Faculty
+exports.getFacultyDetails = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     User.findOne({ _id: req.params.id })
         .then((user) => {
             if (!user) {
-                req.flash("error", "Invalid email or password.");
-                return res.redirect("/");
+                req.flash("error", "Coundn't open faculty");
+                res.redirect('/listFaculty')
             }
             //add if condition if Student of Facutly then based on the condition redirect.
             res.render('facultyDetails', {
-                faculty: user
+                faculty: user,
+                errorMessage: mError,
+                okMessage:mOk
             })
         })
         .catch((err) => {
             console.log(err);
+            req.flash(
+                "error",
+                "Couldn't find faculty! Please try again!"
+            );
             //add if condition if Student of Facutly then based on the condition redirect.
             res.redirect("/listFaculty");
         });
 }
 
-//Update User.
-exports.updateUser = (req, res, next) => {
+//Update Faculty
+exports.updateFaculty = (req, res, next) => {
     const id = req.params.id
     const name = req.body.fname
     const active = req.body.factive
@@ -108,22 +178,64 @@ exports.updateUser = (req, res, next) => {
         .then(result => {
             //add if condition if Student of Facutly then based on the condition redirect.
             console.log("Faculty Updated!");
+            req.flash(
+                "info",
+                "Faculty Updated!"
+            );
             res.redirect('/listFaculty')
         })
         .catch(error => {
             console.log(`Error updating Faculty: ${error.message}`);
+            req.flash(
+                "error",
+                "Couldn't update faculty! Please try again!"
+            );
+            res.redirect("/getShowFaculty/" + id);
         });
 }
 
-//Delete Use.
-exports.deleteUser = (req, res, next) => {
+//Delete Faculty
+exports.deleteFaculty = (req, res, next) => {
+    const id = req.params.id;
+    Faculty.findByIdAndDelete(id)
+        .then(ress => {
+            //add if condition if Student of Faculty then based on the condition redirect.
+            User.findByIdAndDelete(id)
+                .then(resss => {
+                req.flash(
+                    "info",
+                    "Faculty Deleted!"
+                    );
+                res.redirect('/listFaculty');
+            })
+        }).catch(err => {
+            console.log(err.message);
+            req.flash(
+                "error",
+                "Couldn't delete faculty! Please try again!"
+            );
+            res.redirect("/getShowFaculty/" + id);
+        })
+}
+
+
+//Delete Student
+exports.deleteFaculty = (req, res, next) => {
     const id = req.params.id;
     User.findByIdAndDelete(id)
-        .exec().
-        then(ress => {
+        .then(ress => {
             //add if condition if Student of Facutly then based on the condition redirect.
+            req.flash(
+                "info",
+                "Faculty Deleted!"
+            );
             res.redirect('/listFaculty');
         }).catch(err => {
             console.log(err.message);
+            req.flash(
+                "error",
+                "Couldn't delete faculty! Please try again!"
+            );
+            res.redirect("/getShowFaculty/" + id);
         })
 }

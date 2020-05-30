@@ -1,17 +1,27 @@
 <%- include('partials/headerAdmin.ejs') %>
 <div align="center">
-	<form class="contact1-form validate-form" action="addFaculty" method="post">
+	<% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+						</div>
+					<% } else if(okMessage){%>
+						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						</div>
+					<%}%>
+
+	<form class="contact1-form validate-form" action="/addFaculty" method="post">
 					<span class="contact1-form-title">
 						Add Faculty
 					</span>
 
 					<div class="wrap-input1 validate-input" data-validate = "Name is required">
-						<input class="input1" type="text" name="facName" placeholder="Faculty Name">
+						<input class="input1" type="text" name="name" placeholder="Faculty Name">
 						<span class="shadow-input1"></span>
 					</div>
 
 					<div class="wrap-input1 validate-input" data-validate = "Email is required">
-						<input class="input1" type="text" name="facEmail" placeholder="Faculty E-Mail">
+						<input class="input1" type="text" name="email" placeholder="Faculty E-Mail">
 						<span class="shadow-input1"></span>
 					</div>
 
@@ -20,10 +30,10 @@
 						<span class="shadow-input1"></span>
 					</div> -->
 					<div class="wrap-input1 validate-input" data-validate = "Password is required">
-						<input class="input1" type="password" name="facPass" placeholder="Password">
+						<input class="input1" type="password" name="pass" placeholder="Password">
 						<span class="shadow-input1"></span>
 					</div>
-					<input type="hidden" name="facRole" value="faculty">
+					<input type="hidden" name="role" value="faculty">
 					<!-- <div class="wrap-input1 validate-input" data-validate = "Picture is required">
 						<input class="input1" type="text" name="userName" placeholder="Picture">
 						<span class="shadow-input1"></span>

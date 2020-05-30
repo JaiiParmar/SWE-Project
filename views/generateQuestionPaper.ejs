@@ -59,10 +59,6 @@
 #checkboxes .label1:hover {
   background-color: #1e90ff;
 }
-.noHover{
-
-}
-
 .arrow {
   height: .9vw;
   width: .9vw;
@@ -82,19 +78,20 @@
 				<span class="contact1-form-title">
 					Generate Question Paper
 				</span>
-				<hr>
-				<span class="contact1-form-title">
+          <hr>
+          <span class="contact1-form-title">
 					Select Constrains for the Questions
 				</span>
 
 	<div class=" wrap-input1 validate-input" data-validate = "required">
 	<div id="checkboxes">
 	<a href="#content" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
-		<label class="" data-toggle="collapse">Select Topics(defualt-All) <div class="arrow"></div></label></a>
+		<label class="" data-toggle="collapse">Select Topics<div class="arrow"></div></label></a>
 			<ul id="content" class="collapse" data-parent="#sidebar-nav">
 				<% for(let i = 0; mClass.topics[i]; i++) {%>
 					<li><label  for="one">
-					<input type="checkbox" name="mTopics" value="<%= mClass.topics[i]%>" id="one"/><%= mClass.topics[i]%></label></li>
+          <input type="checkbox" name="mTopics" value="<%= mClass.topics[i]%>" id="one"/><%= mClass.topics[i]%></label></li>
+          <input type="hidden" value="<%= mClass.topics[i]%>" name="allTopics">
 				<%}%>
 			</ul>
 				<span class="shadow-input1"></span>
@@ -103,7 +100,7 @@
   <div class=" wrap-input1 validate-input" data-validate = "required">
 	<div id="checkboxes">
 	<a href="#types" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
-		<label class="" data-toggle="collapse">Select types oF Qustions(defualt-All) <div class="arrow"></div></label></a>
+		<label class="" data-toggle="collapse">Select types oF Qustions <div class="arrow"></div></label></a>
 			<ul id="types" class="collapse" data-parent="#sidebar-nav">
 					<li><label  for="one">
 					<input type="checkbox" name="mTypes" value="theory" id="one"/>Theory</label></li>
@@ -118,22 +115,19 @@
 				<span class="shadow-input1"></span>
 	</div>
 
-
-
-
 				<div class="wrap-input1 validate-input" data-validate = " is required">
-					<input class="input1" type="number" name="nEasy" placeholder="Number of Easy questions">
+					<input class="input1" type="number" name="nEasy" placeholder="Number of Easy questions(default 5)">
 					<span class="shadow-input1"></span>
 				</div>
 
 				<div class="wrap-input1 validate-input" data-validate = " is required">
-					<input class="input1" type="number" name="nMedium" placeholder="Number of Medium questions">
-					<span class="shadow-input1"></span>
+					<input class="input1" type="number" name="nMedium" placeholder="Number of Medium questions(default 5)">
+					<span class="shadow-input1"></spa n>
 				</div>
 
 
 				<div class="wrap-input1 validate-input" data-validate = " is required">
-					<input class="input1" type="number" name="nHard" placeholder="Number of Difficult questions">
+					<input class="input1" type="number" name="nHard" placeholder="Number of Difficult questions(default 5)">
 					<span class="shadow-input1"></span>
 				</div>
 				<div class="container-contact1-form-btn">

@@ -19,6 +19,16 @@
     }
 </style>
     <div class="app-content" style="padding-top: 40px;">
+        <% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+						</div>
+					<% } else if(okMessage){%>
+						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						</div>
+					<%}%>
+                        
         <nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
             <button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
         </nav>
@@ -87,6 +97,12 @@
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
                         </button>
+                         <a class="contact1-form-btn" href="/getAddStudent/<%= program._id%>">
+							<span>
+								AddStudents
+								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+							</span>
+                        </a>
                        <a class="contact1-form-btn" href="deleteProgram/<%= program._id%>">
 							<span>
 								Delete

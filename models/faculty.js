@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 const facultySchema = new Schema({
     _id: {
         type: String,
-        ref: 'user',
+        maxlength: 50,
+        required: true,
+        unique: true,
     },
     classes: [
         {

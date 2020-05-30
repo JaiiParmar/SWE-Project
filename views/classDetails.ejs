@@ -81,13 +81,13 @@
                     <div class="container-contact1-form-btn">
                     <a class="contact1-form-btn" href="/getCreateQuestion/<%=mClass.cid%>">
 							<span>
-								Add Question
+								AddQuestion
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
                         </a>
                          <a class="contact1-form-btn" href="/getGenerateQuestionpaper/<%=mClass.cid%>">
 							<span>
-								Generate Question Paper
+								GenerateQuestionPaper
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
                         </a>
@@ -97,15 +97,17 @@
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
                         </a>
-                         <a class="contact1-form-btn" href="listQuestionPapers/<%= mClass._id%>">
+                         <a class="contact1-form-btn" href="/listQuestionPapers/<%=mClass.cid%>">
 							<span>
 								ListQuestionPapers
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
                         </a>
-                       <a class="contact1-form-btn" href="deleteClass/<%= mClass._id%>">
+                        <hr>
+                       <a class="contact1-form-btn"
+                        href="/deleteClass/<%= mClass.cid%>">
 							<span>
-								Delete
+								DeleteClass
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
                         </a>

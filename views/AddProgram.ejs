@@ -1,10 +1,22 @@
 <%- include('partials/headerAdmin.ejs') %>
 
 <div align="center">
-	<form class="contact1-form validate-form" align="left" action="addProgram" method="post">
-					<span class="contact1-form-title">
+	<span class="contact1-form-title">
 						Add Program
 					</span>
+
+					<% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+						</div>
+					<% } else if(okMessage){%>
+						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						</div>
+					<%}%>
+
+					<form class="contact1-form validate-form" align="left" action="addProgram" method="post">
+
 						<div class="wrap-input1 `validate-input" data-validate = "Program Id is required">
 						<input class="input1" type="text" name="pid" placeholder="Program ID">
 						<span class="shadow-input1"></span>

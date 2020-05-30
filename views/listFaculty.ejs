@@ -84,8 +84,20 @@
         display: none;
     }
 </style>
+
     <div class="app-content" style="padding-top: 40px;"><nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white"><button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button></nav><nav aria-label="breadcrumb"></nav>
 <div class="container">
+     <div align="center">
+                    <% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+						</div>
+					<% } else if(okMessage){%>
+						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						</div>
+					<%}%>
+</div>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -99,7 +111,7 @@
                 <table class="table table-bordered" id="data">
                 <thead>
                     <tr>
-                        <th style="background-color: #2e8cc2; opacity:0.9; width:50px">Serial Number</th>
+                        <th style="background-color: #2e8cc2; opacity:0.9; width:50px">ID</th>
                         <th style="background-color: #2e8cc2; opacity:0.9">Name</th>
                         <th style="background-color: #2e8cc2; opacity:0.9">Email-Name</th>
                          <th style="background-color: #2e8cc2; opacity:0.9">Actions</th>
@@ -125,60 +137,3 @@
     </div>
 </div></div></div>
 
-
-
-    <script >
-        ////////////////////////////Pagination/////////////////////////////////
-        $(document).ready(function(){
-    $('#data').after('<div id="nav"></div>');
-    var rowsShown = 10;
-    var rowsTotal = $('#data tbody tr').length;
-    var numPages = rowsTotal/rowsShown;
-    for(i = 0;i < numPages;i++) {
-        var pageNum = i + 1;
-        $('#nav').append('<a href="#" style="color:#ffffff; background-color:#2e8cc2; padding:5px; font-weight:bold;" rel="'+i+'">'+pageNum+'</a> ');
-    }
-    $('#data tbody tr').hide();
-    $('#data tbody tr').slice(0, rowsShown).show();
-    $('#nav a:first').addClass('active');
-    $('#nav a').bind('click', function(){
-
-        $('#nav a').removeClass('active');
-        $(this).addClass('active');
-        var currPage = $(this).attr('rel');
-        var startItem = currPage * rowsShown;
-        var endItem = startItem + rowsShown;
-        $('#data tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
-        css('display','table-row').animate({opacity:1}, 300);
-    });
-});
-
-        function save_course(course_id)
-        {
-            var data = {
-                action: 0,
-                course_name: $('#data').find('.edit-values:eq(0)').val(),
-                duration: $('#data').find('.edit-values:eq(1)').val(),
-                course_id: course_id
-            };
-            $.post("RemoveCourseAjax.php", data, function(response){
-                alert(response);
-            });
-        }
-
-        function edit_course(course_id)
-        {
-            return course_id;
-        }
-
-        function delete_course(course_id)
-        {
-            var data = {
-                action: 1,
-                course_id: course_id
-            };
-            $.post("RemoveCourseAjax.php", data, function(response){
-                alert(response);
-            });
-        }
-    </script>

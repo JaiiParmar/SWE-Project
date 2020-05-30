@@ -119,52 +119,42 @@
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2><%=mQuestions[0].program%><b> <%=mQuestions[0].course%> </b> || Questions </h2></div>
+                    <div class="col-sm-8"><h2><%=mQuestionPapers[0].program%><b> <%=mQuestionPapers[0].course%> </b> || Questions-Papers</h2></div>
                     <div class="col-sm-4">
-                        <a href="/getCreateQuestion/<%=mQuestions[0].class%>"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add New</button></a>
+                        <a href="#"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add New</button></a>
                     </div>
                 </div>
             </div>
-                <table class="table table-bordered" id="data">
+                <table class="table table-bordered" id="course">
                     <thead>
                         <tr>
                             <th style="background-color: #2e8cc2; opacity:0.9; width:50px">ID</th>
-                            <th style="background-color: #2e8cc2; opacity:0.9">Question</th>
+                            <th style="background-color: #2e8cc2; opacity:0.9">Question-Paper-Info</th>
                             <th style="background-color: #2e8cc2; opacity:0.9">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                         <% for(var i=0; i < mQuestions.length; i++) {  %>
+                         <% for(var i=0; i < mQuestionPapers.length; i++) {  %>
                             <tr>
                             <td><%= i+1 %></td>
                             <td>
                                 <div class="question-div">
                                     <div class="question">
-                                        <p><%= mQuestions[i].text %></p>
+                                        <h3><%= mQuestionPapers[i].examName %></h3>
                                     </div>
                                     <div class="question-opt">
                                         <ul class="opts">
-                                            <li><%= mQuestions[i].difficulty %></li>
-                                            <li><%= mQuestions[i].mark %></li>
-                                            <li><%= mQuestions[i].topic %></li>
-                                            <li><%= mQuestions[i].type %></li>
-                                            <!-- <% if(mQuestions[i].type === 'mcq') {%>
-                                                 <li>
-                                                    <select>
-                                                        <option value="">Options</option>
-                                                    <% for(var j=0;mQuestions[i].options[j]; j++) {  %>
-                                                        <option><%= mQuestions[i].options[j] %></option>
-                                                     <% }%>
-                                                    </select>
-                                                    </li>
-                                            <% }%> -->
+                                            <li><%= mQuestionPapers[i].examDate%></li>
+                                            <li><%= mQuestionPapers[i].difficulty %></li>
+                                            <li><%= mQuestionPapers[i].totalMarks %></li>
+                                            <li><%= mQuestionPapers[i].noOfQuestions %></li>
                                         </ul>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <a href="/questionDetails/<%= mQuestions[i]._id%>" class='edit' title='Edit' data-toggle='tooltip'>
+                                <a href="/viewQuestionPaper/<%=mQuestionPapers[i].qpid%>" class='edit' title='Edit' data-toggle='tooltip'>
                                     <i class='material-icons'>&#xE254;</i>
                                 </a>
                             </td>

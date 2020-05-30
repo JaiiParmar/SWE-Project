@@ -13,36 +13,64 @@ const User = require('../models/user');
 
 //render the AddProgram Page....
 exports.getAddProgram = (req, res, next) => {
-    let message = req.flash("error");
-    if (message.length > 0) {
-        message = message[0];
-    } else {
-        message = null;
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
     }
-    res.render("AddProgram", {
-        //path: "/login",
-        pageTitle: "add-product",
-        message : message,
+    else {
+        mError = mOk = null
+    }
+
+    res.render("AddProgram",{
+        errorMessage: mError,
+        okMessage:mOk
     });
 };
 
 // Fetch Program and render it in listProgram.ejs
 exports.listPrograms = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     Program.find({}).exec()
         .then((programs) => {
             if (!programs) {
-                res.render('listProgram', {
-                    messag: "NO RECORD FOUND"
+                res.render('noData', {
+                    feedBack: "No Program Found",
+                    errorMessage: mError,
+                    okMessage:mOk
                 })
             }
             res.render('listProgram', {
-                message: null,
+                errorMessage: mError,
+                okMessage:mOk,
                 programs: programs
             })
         })
         .catch((err) => {
+            console.log("ERROR FETCHING PROGRAM : ", err);
             res.render('listProgram', {
-                message: "NO RECORD FOUND"
+                errorMessage: "Opps! Something's Wrong Please Try Again!",
+                okMessage :null
             })
         })
 };
@@ -50,18 +78,36 @@ exports.listPrograms = (req, res, next) => {
 
 // fetch fet Single program and fetch it in programDetails.ejs
 exports.getProgramDetails = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     Program.findOne({ _id: req.params.id })
         .then((program) => {
             if (!program) {
-                req.flash("error", "Invalid email or password.");
-                return res.redirect("/");
+                req.flash("error", "Couldn't find the Program");
+                return res.redirect("/listProgram");
             }
             res.render('programDetails', {
-                program: program
+                program: program,
+                errorMessage: mError,
+                okMessage:mOk
             })
         })
         .catch((err) => {
             console.log(err);
+            req.flash("error", "Couldn't open the Program");
             res.redirect("/listProgram");
         });
 }
@@ -69,6 +115,7 @@ exports.getProgramDetails = (req, res, next) => {
 
 // Add the program in the Database.
 exports.addProgram = (req, res, next) => {
+
     const id = req.body.pid
     const name = req.body.pname
     const duration = req.body.duration
@@ -82,19 +129,17 @@ exports.addProgram = (req, res, next) => {
         message = null;
         if (err) {
             console.error(err);
-            message = "Sorry! Could not Add the Program!"
+            req.flash("error", "Sorry! Could not Add the Program!");
+        } else {
+            req.flash("info", "Program Added!");
         }
-        message = "Program Added!"
-        res.render('AddProgram',
-            {
-                message: message
-        })
+        res.redirect('/getAddProgram')
     });
 }
 
-
 //Update the Program
 exports.updateProgram = (req, res, next) => {
+
     const id = req.params.id
     const name = req.body.pname
     const duration = req.body.pduration
@@ -109,12 +154,13 @@ exports.updateProgram = (req, res, next) => {
     } )
         .then(result => {
             console.log("Program Updated!");
-            //this.getProgramDetails(req, res, next);
+            req.flash('info', 'Program Updated!');
             res.redirect('/listProgram')
         })
-    .catch(error => {
-        console.log(`Error updating Program: ${error.message}`);
-        
+        .catch(error => {
+            console.log(`Error updating Program: ${error.message}`);
+            req.flash('error', "Counldn't update the program");
+            res.redirect('/getShowProgram/' + id )
     });
 };
 
@@ -122,11 +168,13 @@ exports.updateProgram = (req, res, next) => {
 exports.deleteProgram = (req, res, next) => {
     const id = req.params.id;
     Program.findByIdAndDelete(id)
-        .exec().
-    then(ress => {
+        .then(ress => {
+        req.flash('error', 'Program Deleted!');
         res.redirect('/listProgram');
     }).catch(err => {
         console.log(err.message);
+        req.flash('error', "Counldn't delete the program");
+        res.redirect('/getShowProgram/' + id)
      })
 };
 
@@ -139,23 +187,63 @@ exports.deleteProgram = (req, res, next) => {
 //*********************************************************************************** */
 
 
+exports.getAddCourse = (req, res, next) => {
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+    res.render('AddCourse', {
+        errorMessage: mError,
+        okMessage: mOk
+    })
+}
+
 //list course
 exports.listCourses = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     Course.find({}).exec()
         .then((courses) => {
             if (!courses) {
-                res.render('listCourse', {
-                    messag: "NO RECORD FOUND"
+                res.render('noData', {
+                    feedBack: "No Course Found",
+                    errorMessage: mError,
+                    okMessage: mOk
                 })
             }
             res.render('listCourse', {
                 message: null,
+                errorMessage: mError,
+                okMessage: mOk,
                 courses: courses
             })
         })
         .catch((err) => {
+            console.log(err);
             res.render('listCourse', {
-                message: "NO RECORD FOUND"
+                message: "NO RECORD FOUND",
             })
         })
 };
@@ -174,30 +262,46 @@ exports.addCourse = (req, res, next) => {
         message = null;
         if (err) {
             console.error(err);
-            message = "Could not Add the Program!"
+            req.flash("error", "Sorry! Could not Add the Course!");
+            return res.redirect('/getAddCourse');
         }
-        message = "Course Added!"
-        res.render('AddCourse',
-            {
-                message: message
-            })
+        req.flash("info", "Course Added!");
+        res.redirect('/getAddCourse')
     });
 };
 
 //Get Single program.
 exports.getCourseDetails = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     Course.findOne({ _id: req.params.id })
         .then((course) => {
             if (!course) {
-                req.flash("error", "Invalid email or password.");
-                return res.redirect("/");
+                req.flash("error", "Couldn't find the Course");
+                return res.redirect("/listCourses");
             }
             res.render('courseDetails', {
-                course: course
+                course: course,
+                errorMessage: mError,
+                okMessage:mOk
             })
         })
         .catch((err) => {
             console.log(err);
+            req.flash("error", "Counldn't open the Course");
             res.redirect("/listCourse");
         });
 }
@@ -217,11 +321,13 @@ exports.updateCourse = (req, res, next) => {
         }
     })
         .then(result => {
-            console.log("Course Updated!");
+            req.flash('info', "Course Updated!")
             res.redirect('/listCourses')
         })
         .catch(error => {
             console.log(`Error updating Course: ${error.message}`);
+            req.flash('error', "Couldn't updated the course!")
+            res.redirect('/getShowCourse/' + id)
         });
 };
 
@@ -231,37 +337,126 @@ exports.deleteCourse = (req, res, next) => {
     Course.findByIdAndDelete(id)
         .exec().
         then(ress => {
+            req.flash('error', "Course Deleted!")
             res.redirect('/listCourses');
         }).catch(err => {
             console.log(err.message);
+            req.flash('error', "Couldn't updated the course!")
+            res.redirect('/getShowCourse/' + id)
     })
 };
 
 //*********************************************************************************** */
-/**Program Routes */
+/**Faculty Routes */
 
 //*********************************************************************************** */
 
+
+exports.getAddFaculty = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
+    res.render('AddFaculty', {
+        errorMessage: mError,
+        okMessage: mOk
+    });
+}
+
+
 //list Faculty
 exports.listFaculty = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
   User.find()
     .where({ role: "faculty" })
-    .exec()
     .then((faculties) => {
       if (!faculties) {
-        res.render("listFaculty", {
-          messag: "NO RECORD FOUND",
-        });
+          res.render('noData', {
+              feedBack: "No Faculty Found",
+              errorMessage: mError,
+              okMessage: mOk
+          })
       }
       res.render("listFaculty", {
-        message: null,
-        faculties: faculties,
+          message: null,
+          faculties: faculties,
+          errorMessage: mError,
+          okMessage:mOk
       });
     })
     .catch((err) => {
       res.render("listFaculty", {
-        message: "NO RECORD FOUND",
+          message: "NO RECORD FOUND",
+          errorMessage: mError,
+          okMessage: mOk
       });
     });
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+//*********************************************************************************** */
+/**Student's Routes */
+
+//*********************************************************************************** */
+
+exports.getAddStudent = (req, res, next) => {
+    const programId = req.params.pid;
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
+    res.render('AddStudent', {
+        errorMessage: mError,
+        okMessage: mOk,
+        programId: programId
+    });
+
+}

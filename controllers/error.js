@@ -9,6 +9,7 @@ exports.get404 = (req, res, next) => {
 //render the noData.ejs page.
 exports.getNoDataError = (req, res, next) => {
     res.status(404).render('noData', {
-        pageTitle: 'DataNotFonnd'
+        pageTitle: 'NoData',
+        message:message
     });
 };

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const studentSchema = new Schema({
-    user_info: {
+    _id: {
         type: String,
         ref: 'user',
     },

@@ -27,9 +27,18 @@
 <div class="" align="center">
 <div style="background-color: rgb(223, 235, 231);"><img src="/images/da1.png" style="margin:20px"></div>
   <div style="align-self: center;">
-<% if( errorMessage) {%>
-  <h5 style="font-size: 16px; margin: 20px;"><%= errorMessage %> </h5>
-<% } %>
+	
+<% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+						</div>
+<% } else if(okMessage){%>
+						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						</div>
+<%}%>
+
+
 <h5 style="font-size: 16px; margin: 20px;">Enter your Email and Password! </h5>
     <form action="/" method="POST" style="align-self: center;">
   <input type="text" name="email" placeholder="Username" required="required" class="input-type-text" /><br>

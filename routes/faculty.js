@@ -22,7 +22,9 @@ router.get('/listTopics/:cid', isAuth, facultyController.listTopics);
 
 router.get("/listClasses", isAuth, facultyController.getListClass);
 
-router.get("/classDetails/:id", isAuth, facultyController.getDetailsClass);
+router.get("/classDetails/:cid", isAuth, facultyController.getDetailsClass);
+
+router.get("/deleteClass/:cid", isAuth, facultyController.deleteClass);
 
 router.get("/getCreateTopic/:cid", isAuth, facultyController.getCreateTopic);
 
@@ -54,8 +56,6 @@ router.get("/deleteQuestion/:questionId/:classId", isAuth, questionBankControlle
 
 
 
-
-
 //***********************************************************************************/
 /** CRUD Questions Paper... */
 //***********************************************************************************/
@@ -65,7 +65,13 @@ router.get('/getGenerateQuestionpaper/:classId', isAuth, questionPaperController
 
 router.post('/generateQuestionPaper/:classId', isAuth, questionPaperController.generateQuestionPaper)
 
+router.post('/questionPaper', isAuth, questionPaperController.createQuestionPaper)
 
+router.post('/saveQuestionPaper', isAuth, questionPaperController.saveQuestionPapaer)
+
+router.get('/listQuestionPapers/:classId', isAuth, questionPaperController.listQuestionPaper)
+
+router.get('/viewQuestionPaper/:qpId', isAuth, questionPaperController.viewQuestionPaper)
 
 //***********************************************************************************/
 

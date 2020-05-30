@@ -16,7 +16,7 @@ const router = express.Router();
 //*********************************************************************************** */
 
 //render AddProgram.ejs page.
-router.get("/getAddProgram", isAuth, (req, res, next) => res.render('AddProgram'));
+router.get("/getAddProgram", isAuth, adminController.getAddProgram);
 
 //Add program - Database.
 router.post("/addProgram", isAuth, adminController.addProgram);
@@ -44,7 +44,7 @@ router.post('/getShowProgram/updateProgram/:id', isAuth, adminController.updateP
 //*********************************************************************************** */
 
 //render AddCourse.ejs page.
-router.get("/getAddCourse", isAuth, (req, res, next) => res.render('AddCourse'));
+router.get("/getAddCourse", isAuth, adminController.getAddCourse);
 
 // add Course -Database.
 router.post("/addCourse", isAuth, adminController.addCourse);
@@ -72,23 +72,31 @@ router.post('/getShowCourse/updateCourse/:id', isAuth, adminController.updateCou
 //*********************************************************************************** */
 
 //render AddFaculty page.
-router.get("/getAddFaculty", isAuth, (req, res, next) => res.render('AddFaculty'));
+router.get("/getAddFaculty", isAuth, adminController.getAddFaculty);
 
 //list Facutly.
 router.get("/listFaculty", isAuth, adminController.listFaculty);
 
 //Add Faculty - Database.
-router.post("/addFaculty", isAuth, userController.addFaculty);
+router.post("/addFaculty", isAuth, userController.addUser);
 
 // a Single Faculty Details.
-router.get("/getShowFaculty/:id", isAuth, userController.getUserDetails);
+router.get("/getShowFaculty/:id", isAuth, userController.getFacultyDetails);
 
 // Detele a Faculty.
-router.get('/getShowFaculty/deleteFaculty/:id', isAuth, userController.deleteUser);
+router.get('/getShowFaculty/deleteFaculty/:id', isAuth, userController.deleteFaculty);
 
 // Update a Faculty.
-router.post('/getShowFaculty/updateFaculty/:id', isAuth, userController.updateUser);
+router.post('/getShowFaculty/updateFaculty/:id', isAuth, userController.updateFaculty);
 
+
+
+
+// get add Student
+router.get("/getAddStudent/:pid", isAuth, adminController.getAddStudent);
+
+//Add Student - Database.
+router.post("/addStudent/:pid", isAuth, userController.addUser);
 
 //exports the routes
 module.exports = router;

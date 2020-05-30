@@ -4,17 +4,28 @@ const User = require("../models/user");
 
 //render the login.ejs page.
 exports.getLogin = (req, res, next) => {
-  let message = req.flash("error");
-  if (message.length > 0) {
-    message = message[0];
-  } else {
-    message = null;
+
+  let mError = req.flash("error");
+  let mOk = req.flash("info");
+
+  if (mError.length > 0) {
+    mError = mError[0];
+    mOk = null
+  } else if (mOk.length > 0) {
+    mOk = mOk[0];
+    mError = null
   }
+  else {
+    mError = mOk = null
+  }
+  
   res.render("login",{
     //path: "/login",
     pageTitle: "Login",
-    errorMessage: message,
+    errorMessage: mError,
+    okMessage:mOk
   });
+
 };
 
 // Authenticate the user... Create the session...
@@ -62,7 +73,10 @@ exports.postLogin = (req, res, next) => {
 
 //logout.... end the session.
 exports.postLogout = (req, res, next) => {
+  req.flash("info", "Successfully Logged Out");
   req.session.destroy((err) => {
     res.redirect("/");
   });
 };
+
+

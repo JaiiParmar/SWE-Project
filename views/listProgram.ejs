@@ -84,61 +84,19 @@
         display: none;
     }
 </style>
-<!-- <script type="text/javascript">
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-    var actions = $("table td:last-child").html();
-    // Append table with add row form on add new button click
-    $(".add-new").click(function(){
-        $(this).attr("disabled", "disabled");
-        var index = $("table tbody tr:last-child").index();
-        var row = '<tr>' +
-            '<td><input type="text" class="form-control" name="name" id="name"></td>' +
-            '<td><input type="text" class="form-control" name="department" id="department"></td>' +
-            '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
-            '<td>' + actions + '</td>' +
-        '</tr>';
-        $("table").append(row);
-        $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-    // Add row on add button click
-    $(document).on("click", ".add", function(){
-        var empty = false;
-        var input = $(this).parents("tr").find('input[type="text"]');
-        input.each(function(){
-            if(!$(this).val()){
-                $(this).addClass("error");
-                empty = true;
-            } else{
-                $(this).removeClass("error");
-            }
-        });
-        $(this).parents("tr").find(".error").first().focus();
-        if(!empty){
-            input.each(function(){
-                $(this).parent("td").html($(this).val());
-            });
-            $(this).parents("tr").find(".add, .edit").toggle();
-            $(".add-new").removeAttr("disabled");
-        }
-    });
-    // Edit row on edit button click
-    $(document).on("click", ".edit", function(){
-        $(this).parents("tr").find("td:not(:last-child):not(:first-child)").each(function(){
-            $(this).html('<input type="text" class="form-control edit-values" value="' + $(this).text() + '">');
-        });
-        $(this).parents("tr").find(".add, .edit").toggle();
-        $(".add-new").attr("disabled", "disabled");
-    });
-    // Delete row on delete button click
-    $(document).on("click", ".delete", function(){
-        $(this).parents("tr").remove();
-        $(".add-new").removeAttr("disabled");
-    });
-});
-</script> -->
+
 <div class="app-content" style="padding-top: 40px;">
+    <div align="center">
+                    <% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+						</div>
+					<% } else if(okMessage){%>
+						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						</div>
+					<%}%>
+</div>
     <nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
         <button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
     </nav><nav aria-label="breadcrumb"></nav>
@@ -148,14 +106,14 @@ $(document).ready(function(){
                 <div class="row">
                     <div class="col-sm-8"><h2>Program <b>Details</b></h2></div>
                     <div class="col-sm-4">
-                        <a href="getAddProgram"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button></a>
+                        <a href="/getAddProgram"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button></a>
                     </div>
                 </div>
             </div>
                 <table class="table table-bordered" id="data">
                 <thead>
                     <tr>
-                        <th style="background-color: #2e8cc2; opacity:0.9; width:50px">Serial Number</th>
+                        <th style="background-color: #2e8cc2; opacity:0.9; width:50px">ID</th>
                         <th style="background-color: #2e8cc2; opacity:0.9">Program ID</th>
                         <th style="background-color: #2e8cc2; opacity:0.9">Program-Name</th>
                         <th style="background-color: #2e8cc2; opacity:0.9">Duration(in Year)</th>
@@ -185,59 +143,3 @@ $(document).ready(function(){
 
 
 </div></div></div>
-
-    <script >
-        ////////////////////////////Pagination/////////////////////////////////
-        $(document).ready(function(){
-    $('#data').after('<div id="nav"></div>');
-    var rowsShown = 7;
-    var rowsTotal = $('#data tbody tr').length;
-    var numPages = rowsTotal/rowsShown;
-    for(i = 0;i < numPages;i++) {
-        var pageNum = i + 1;
-        $('#nav').append('<a href="#" style="color:#ffffff; background-color:#2e8cc2; padding:5px; font-weight:bold;" rel="'+i+'">'+pageNum+'</a> ');
-    }
-    $('#data tbody tr').hide();
-    $('#data tbody tr').slice(0, rowsShown).show();
-    $('#nav a:first').addClass('active');
-    $('#nav a').bind('click', function(){
-
-        $('#nav a').removeClass('active');
-        $(this).addClass('active');
-        var currPage = $(this).attr('rel');
-        var startItem = currPage * rowsShown;
-        var endItem = startItem + rowsShown;
-        $('#data tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
-        css('display','table-row').animate({opacity:1}, 300);
-    });
-});
-
-        function save_course(course_id)
-        {
-            var data = {
-                action: 0,
-                course_name: $('#data').find('.edit-values:eq(0)').val(),
-                duration: $('#data').find('.edit-values:eq(1)').val(),
-                course_id: course_id
-            };
-            $.post("RemoveCourseAjax.php", data, function(response){
-                alert(response);
-            });
-        }
-
-        function edit_course(course_id)
-        {
-            return course_id;
-        }
-
-        function delete_course(course_id)
-        {
-            var data = {
-                action: 1,
-                course_id: course_id
-            };
-            $.post("RemoveCourseAjax.php", data, function(response){
-                alert(response);
-            });
-        }
-    </script>

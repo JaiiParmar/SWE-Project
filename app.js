@@ -19,6 +19,9 @@ const db = "paper_generator"; // database name
 //set url
 
 const MONGODB_URI = `mongodb://${host}:${port}/${db}`;
+
+
+
 const app = express();
 //const csrfProtection = csrf();
 const store = new MongoDBStore({
@@ -41,8 +44,6 @@ app.use(bodyparser.urlencoded({
   extended: true
 }));
 app.use(bodyparser.json());
-//app.use(csrfProtection);
-app.use(flash());
 
 app.use(
   session({
@@ -52,6 +53,10 @@ app.use(
     store: store,
   })
 );
+
+//app.use(csrfProtection);
+app.use(flash());
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -81,7 +86,7 @@ app.use('/', authRoutes);
 app.use('/', facultyRoutes);
 
 //if no routes found.
-// app.use(errorController.get404);
+app.use(errorController.get404);
 
 mongoose
   .connect(MONGODB_URI, { useUnifiedTopology: true, useCreateIndex: true,useNewUrlParser: true })
