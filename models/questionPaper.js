@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const questionPaperSchema = new Schema({
   faculty: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "faculty",
   },
   program: {
@@ -14,15 +14,15 @@ const questionPaperSchema = new Schema({
     type: String,
     ref: "course",
   },
+  class: {
+    type:String,
+  },
   created_at: {
     type: Date,
     default: Date.now(),
   },
-  // Questions: [
-  //   ,/** ...Array of Questions... */
-  // /** ...file(pdf, word, etc..)*/
-  // ],
-   total_question: {
+  questions: [],
+  total_question: {
     type: Number,
     required: true,
   },
@@ -34,7 +34,10 @@ const questionPaperSchema = new Schema({
     type: Number,
   },
   exam_date: {
-    type: Date,
+    type: String,
+  },
+  exam_name: {
+    type:String
   },
   time_duration: {
     type: Number,
@@ -45,7 +48,7 @@ const questionPaperSchema = new Schema({
     enum: ["easy", "medium", "hard"],
     default: "easy",
   },
-  instructions: [String],
+  instructions: { type:String },
   public: {
     type: Boolean,
     default: false,

@@ -84,7 +84,6 @@ exports.getListClass = (req, res, next) => {
         .then(classes => {
             if (!classes)
                 message = 'No Classes! '
-            console.log(classes);
             res.render('listClass', { classes: classes.classes });
         })
         .catch(error => {
@@ -100,7 +99,7 @@ exports.getDetailsClass = (req, res, next) => {
 
     let message = null;
     const id = req.user._id;
-    const classId = req.params.id
+    const classId = req.params.cid
 
     Faculty.findById(id)
         .then(mClass => {
@@ -129,6 +128,28 @@ exports.getDetailsClass = (req, res, next) => {
             res.render('noData', { message: message })
         });
 }
+
+
+exports.deleteClass = (req, res, next) => {
+    // //Delete the Class
+    // const id = req.user._id;
+    // const classId = req.params.cid;
+
+    // Faculty.findByIdAndUpdate(id, {
+    //     $pull: {
+    //         classes: { _id: classId }
+    //     }
+    // })
+    //     .then(ress => {
+            res.redirect('/listClasses');
+        // })
+        // .catch(error => {
+        //     console.log(`Error Deleting Class : ${error.message}`);
+        //     message = "Opps! Something's wrong! Please try again later."
+        //     res.render('noData', { message: message })
+        // });
+}
+
 
 exports.listTopics = (req, res, next) => {
 
@@ -298,7 +319,7 @@ exports.deleteTopic = (req, res, next) => {
     const classId = req.params.cid
     const topic = req.params.tid
     //make sure that the entry is unique.
-    Faculty.updateOne({ "_id": id, "classes._id":classId },
+    Faculty.updateOne({ "_id": id, "classes._id": classId },
         {
              "$pull": {
                 "classes.$.topics": topic

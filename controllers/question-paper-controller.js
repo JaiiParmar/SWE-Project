@@ -1,11 +1,15 @@
 const Question = require("../models/question");
 const Faculty  = require("../models/faculty")
 const QuestionPaper = require("../models/questionPaper");
+const Cache = require('../models/cacheQuestions');
+
+
+
 
 exports.getGenerateQuestionPaper = (req, res, next) => {
     let message = null;
     const id = req.user._id;
-    const classId = req.params.classId
+    const classId = req.params.classId;
 
     Faculty.findById(id)
         .then(mClass => {
@@ -39,71 +43,68 @@ exports.getGenerateQuestionPaper = (req, res, next) => {
 
 
 
-
 exports.generateQuestionPaper = (req, res, next) => {
 
-    console.log("Generating Questiona Paper");
+    console.log("Generating Questiona Paper Started!");
 
     let message = null;
     const classId = req.params.classId;
 
-    const topics = req.body.mTopics;
-    console.log(topics);
+    const allTopic = req.body.allTopics;
+    //if no topics is selected... select all topics.
+    let topics = req.body.mTopics;
+    if (!topics) {
+        topics = allTopic
+    }
 
-    const types = req.body.mTypes;
-    console.log(types);
+    //if no type is seleceted.... selecte all type of questions...
+    let types = req.body.mTypes;
+    if (!types) {
+        types =['theory', 'mcq', 'yes/no', 'true/false']
+    }
 
     let nEasy = req.body.nEasy;
     let nMedium = req.body.nMedium;
     let nHard = req.body.nHard;
-    console.log(nEasy, nMedium, nHard);
 
-    // const type = [1]
-    // type.length = 0;
+    const totalQuestion = parseInt(nEasy) + parseInt(nMedium) + parseInt(nHard);
 
-    // if (String(req.body.type) !== 'theoryoptional') {
-    //     if (String(req.body.type) === "theory")
-    //         type.push('theory');
-    //     else {
-    //         type.push('mcq');
-    //         type.push('yes/no');
-    //         type.push('true/false');
-    //     }
-    // }
-    // else {
-    //     type.push('theory');
-    //     type.push('mcq');
-    //     type.push('yes/no');
-    //     type.push('true/false');
-    // }
     Question.find({ class: classId, topic:{$in:topics}, type: {$in:types}})
         .then(mQuestions => {
             if (!mQuestions) {
                 console.log(mQuestions);
                 message = 'No Questions'
             }
+
+            const randomizedQuestions = [mQuestions[0]]
+            randomizedQuestions.length = 0;
+            //Randomize
+            for (let i in mQuestions) {
+                let randomIndex = Math.floor(Math.random() * mQuestions.length);
+                while (randomizedQuestions.includes(mQuestions[randomIndex])) {
+                    randomIndex = Math.floor(Math.random() * mQuestions.length);
+                }
+                randomizedQuestions[i] = mQuestions[randomIndex];
+            }
+
             //An array to store final question that meets with the requirements...
+
             const finalQuestions = [mQuestions[0]]
             finalQuestions.length = 0;
-            //console.log(mQuestions);
-            console.log(typeof mQuestions);
-            console.log(typeof finalQuestions);
 
-            //From all the fetched questions...
-            //Select number of Easy, Medium, Hard...
-            for (let i = 0; mQuestions[i]; i++) {
+            for (let i = 0; randomizedQuestions[i]; i++) {
                 if (nEasy || nMedium || nHard) {
-                    if ((mQuestions[i].difficulty === 'easy') && nEasy > 0) {
+                    if ((randomizedQuestions[i].difficulty === 'easy') && nEasy > 0) {
                         nEasy--;
-                        finalQuestions.push(mQuestions[i]);
+                        finalQuestions.push(randomizedQuestions[i]);
                     }
-                    else if ((mQuestions[i].difficulty === 'medium') && nMedium > 0) {
+                    else if ((randomizedQuestions[i].difficulty === 'medium') && nMedium > 0) {
                         nMedium--;
-                        finalQuestions.push(mQuestions[i]);
+                        finalQuestions.push(randomizedQuestions[i]);
                     }
-                    else if ((mQuestions[i].difficulty === 'hard') && nHard > 0){
+                    else if ((randomizedQuestions[i].difficulty === 'hard') && nHard > 0){
                         nHard--;
-                        finalQuestions.push(mQuestions[i]);
+                        finalQuestions.push(randomizedQuestions[i]);
                     }
                 }
                 else {
@@ -112,13 +113,238 @@ exports.generateQuestionPaper = (req, res, next) => {
             }
             //console.log(finalQuestions);
             //console.log("Rendering the Questions...");
+            if (finalQuestions.length < totalQuestion) {
+                message = "Sorry! Not enough Questions for the speacified 'Constraints'!"
+                console.log(message);
+                res.render('noData', { feedBack: message })
+            }
+
+
+            console.log("Generating Questiona Paper Complete!");
 
             res.render('questionPaper', {
-                mQuestions: finalQuestions
+                mQuestions: finalQuestions,
+                mTotalQuestion: totalQuestion,
+                classId: classId,
+                response_for: 'draft',
+                feedBack : 'OK'
             });
         })
         .catch(error => {
             console.log(`Error Fetching Class : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { feedBack : message })
+        });
+}
+
+
+exports.createQuestionPaper = (req, res, next) => {
+    // const mCacheId = req.params.cacheId;
+    // console.log(mCacheId);
+    const id = req.user._id;
+    const classId = req.body.classId;
+    const mQuestionIds = req.body.finalQuestionIds;
+
+    //Will do it using CacheQuestions....later...
+    Question.find({ _id:{ "$in": mQuestionIds } })
+        .then(mFinalQuestions => {
+
+            //find class's Program ID and Course ID;
+            let program = "";
+            let course = "";
+            Faculty.find({ "_id": id, "classes._id": classId })
+                .then(classDetails => {
+
+                    for (let i = 0; classDetails[0].classes[i]; i++) {
+                        if (String(classDetails[0].classes[i]._id) === classId) {
+                            program =classDetails[0].classes[i].program;
+                            course = classDetails[0].classes[i].course;
+                        }
+                    }
+
+                    const totalQuestion = mFinalQuestions.length
+                    mEasy = mMedium = mHard = 0;
+                    //find total Questions and Paper's difficulty..
+                    let totalMarks = 0;
+                    for (let i = 0; mFinalQuestions[i]; i++) {
+                        totalMarks += mFinalQuestions[i].mark;
+                        if (mFinalQuestions[i].difficulty === 'easy')
+                            mEasy++;
+                        else if (mFinalQuestions[i].difficulty === 'medium')
+                            mMedium++;
+                        else
+                            mHard++;
+                    }
+
+                    let difficulty = ''
+                    if (mEasy >= mMedium)
+                        if (mEasy == mHard)
+                            difficulty = 'medium'
+                        else if (mEasy > mHard)
+                            difficulty = 'easy'
+                        else
+                            difficulty = 'hard'
+                    else
+                        if (mMedium > mHard)
+                            difficulty = 'medium'
+                        else
+                            difficulty = 'hard'
+
+                    //Cache the Questions' Ids.
+                    const mCache = new Cache({
+                        questions: mFinalQuestions
+                    })
+                    cacheId = mCache._id;
+
+                    mCache.save()
+                        .then(result => {
+                            console.log("Question Cached!");
+
+                            res.render('questionPaper', {
+                                mQuestions: mFinalQuestions,
+                                mTotalQuestion: totalQuestion,
+                                mProgramId: program,
+                                mCourseId: course,
+                                mCacheId: cacheId,
+                                mtotalMarks: totalMarks,
+                                mDifficulty: difficulty,
+                                mClassId: classId,
+                                response_for: 'final',
+                                feedBack: 'OK'
+                        })
+                    })
+                })
+                .catch(error => {
+                    console.log(`Error : ${error.message}`);
+                    message = "Opps! Something's wrong! Please try again later."
+                    res.render('noData', { feedBack: message })
+                });
+        })
+        .catch(error => {
+            console.log(`Error : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { feedBack: message })
+        });
+}
+
+
+
+exports.saveQuestionPapaer = (req, res, next) => {
+
+    const id = req.user._id;
+    const classId = req.body.classId;
+    const programId = req.body.programId;
+    const courseId = req.body.courseId;
+    const cacheId = req.body.cacheId;
+    const difficulty = req.body.difficulty;
+    const totalQuestion = req.body.totalQuestion;
+    const totalMarks = req.body.totalMarks;
+    const examDate = req.body.examDate;
+    const timeDuration = req.body.timeDuration;
+    const examName = req.body.examName;
+    const instractions = req.body.instructions;
+
+    //fetche the cached questions...
+    Cache.findById(cacheId)
+        .then(mQuestions => {
+            if (!mQuestions) {
+                console.log(mQuestions);
+                message = 'No Classes'
+            }
+            //save the question paper...
+
+            const mQuestionPaper = new QuestionPaper({
+                questions: mQuestions.questions,
+                faculty: id,
+                program: programId,
+                course: courseId,
+                class:classId,
+                total_question: totalQuestion,
+                total_mark: totalMarks,
+                exam_date: examDate,
+                difficulty: difficulty,
+                instructions: instractions,
+                time_duration: timeDuration,
+                exam_name: examName,
+            });
+            console.log();
+            mQuestionPaper.save()
+                .then(result => {
+                    res.redirect('/viewQuestionPaper/' + mQuestionPaper._id);
+                })
+                .catch(error => {
+                    console.log(`Error Saving Questions Paper : ${error.message}`);
+                    message = "Opps! Something's wrong! Please try again later."
+                    res.render('noData', { feedBack: message })
+                });
+        })
+        .catch(error => {
+            console.log(`Error Fetching Data From Cache : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { feedBack: message })
+        });
+}
+
+
+exports.listQuestionPaper = (req, res, next) => {
+    let message = null;
+    const classId = req.params.classId;
+
+    QuestionPaper.find({ class: classId })
+        .then(mQuestionPapers => {
+            if (!mQuestionPapers) {
+                console.log(mQuestionPapers);
+                message = 'No Questions'
+            }
+
+            // res.render('listQuestions', {
+            //     mQuestions: mQuestions
+            // });
+
+            const QuestionPaparDetails = [' ']
+            QuestionPaparDetails.length = 0;
+
+            for (let i = 0; mQuestionPapers[i]; i++){
+                const mQuestionDetails = {
+                    qpid: mQuestionPapers[i].id,
+                    examName: mQuestionPapers[i].exam_name,
+                    examDate: mQuestionPapers[i].exam_date,
+                    difficulty : mQuestionPapers[i].difficulty,
+                    totalMarks: mQuestionPapers[i].time_duration,
+                    noOfQuestions: mQuestionPapers[i].total_question,
+                    program: mQuestionPapers[i].program,
+                    course: mQuestionPapers[i].course,
+                }
+                QuestionPaparDetails.push(mQuestionDetails)
+            }
+
+            res.render('listQuestionPapers', {
+                mQuestionPapers: QuestionPaparDetails
+            });
+
+        })
+        .catch(error => {
+            console.log(`Error Fetching QuestionPapers : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { message: message })
+        });
+}
+
+
+exports.viewQuestionPaper = (req, res, next) => {
+    const questionPaperId = req.params.qpId;
+    console.log(questionPaperId);
+    QuestionPaper.findById(questionPaperId)
+        .then(mQuestionPaper => {
+            console.log(mQuestionPaper.questions[0]);
+            res.render('questionPaper', {
+                QuestionPaper: mQuestionPaper,
+                response_for: 'view',
+                feedBack: 'OK'
+            })
+        })
+        .catch(error => {
+            console.log(`Error Fetching QuestionPapers : ${error.message}`);
             message = "Opps! Something's wrong! Please try again later."
             res.render('noData', { message: message })
         });
