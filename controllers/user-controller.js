@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const Faculty = require('../models/faculty');
 const Student = require('../models/student');
+const Question = require("../models/question");
+
 
 // Add faculty and send email.
 exports.addUser = (req, res, next) => {
@@ -19,14 +21,14 @@ exports.addUser = (req, res, next) => {
     User.findOne({ _id: id })
         .then((userDoc) => {
             if (userDoc) {
-                req.flash(
+               req.flash(
                     "error",
                     "E-Mail exists already."
                 );
                 if (role === 'faculty')
-                    res.redirect("/getAddFaculty");
+                    return res.redirect("/getAddFaculty");
                 else
-                    res.redirect('/getAddStudent/' + program)
+                    return res.redirect('/getAddStudent/' + program)
             }
             return bcrypt
                 .hash(password, 12)
@@ -49,7 +51,7 @@ exports.addUser = (req, res, next) => {
                                 return res.redirect('/getAddFaculty')
                             })
                     }
-                    else if (role === 'Student') {
+                    else if (role === 'student') {
                         //add reference to facutly
                         Student({ _id: id, program:program})
                             .save().catch((err) => {
@@ -144,7 +146,7 @@ exports.getFacultyDetails = (req, res, next) => {
         .then((user) => {
             if (!user) {
                 req.flash("error", "Coundn't open faculty");
-                res.redirect('/listFaculty')
+                return res.redirect('/listFaculty')
             }
             //add if condition if Student of Facutly then based on the condition redirect.
             res.render('facultyDetails', {
@@ -177,12 +179,11 @@ exports.updateFaculty = (req, res, next) => {
     })
         .then(result => {
             //add if condition if Student of Facutly then based on the condition redirect.
-            console.log("Faculty Updated!");
             req.flash(
                 "info",
                 "Faculty Updated!"
             );
-            res.redirect('/listFaculty')
+            return res.redirect('/listFaculty')
         })
         .catch(error => {
             console.log(`Error updating Faculty: ${error.message}`);
@@ -197,45 +198,44 @@ exports.updateFaculty = (req, res, next) => {
 //Delete Faculty
 exports.deleteFaculty = (req, res, next) => {
     const id = req.params.id;
-    Faculty.findByIdAndDelete(id)
-        .then(ress => {
-            //add if condition if Student of Faculty then based on the condition redirect.
-            User.findByIdAndDelete(id)
-                .then(resss => {
+    Question.deleteMany({ "faculty": id })
+        .then(rres => {
+        Faculty.findByIdAndDelete(id)
+            .then(ress => {
+                //add if condition if Student of Faculty then based on the condition redirect.
+                User.findByIdAndDelete(id)
+                    .then(resss => {
+                        req.flash(
+                            "info",
+                            "Faculty Deleted!"
+                        );
+                        res.redirect('/listFaculty');
+                    })
+                    .catch(err => {
+                        console.log(err.message);
+                        req.flash(
+                            "error",
+                            "Couldn't delete faculty! Please try again!"
+                        );
+                        res.redirect("/getShowFaculty/" + id);
+                    })
+            }).catch(err => {
+                console.log(err.message);
                 req.flash(
-                    "info",
-                    "Faculty Deleted!"
-                    );
-                res.redirect('/listFaculty');
+                    "error",
+                    "Couldn't delete faculty! Please try again!"
+                );
+                res.redirect("/getShowFaculty/" + id);
             })
-        }).catch(err => {
-            console.log(err.message);
-            req.flash(
-                "error",
-                "Couldn't delete faculty! Please try again!"
-            );
-            res.redirect("/getShowFaculty/" + id);
-        })
+    }).catch(err => {
+        console.log(err.message);
+        req.flash(
+            "error",
+            "Couldn't delete faculty! Please try again!"
+        );
+        res.redirect("/getShowFaculty/" + id);
+    })
+
 }
 
 
-//Delete Student
-exports.deleteFaculty = (req, res, next) => {
-    const id = req.params.id;
-    User.findByIdAndDelete(id)
-        .then(ress => {
-            //add if condition if Student of Facutly then based on the condition redirect.
-            req.flash(
-                "info",
-                "Faculty Deleted!"
-            );
-            res.redirect('/listFaculty');
-        }).catch(err => {
-            console.log(err.message);
-            req.flash(
-                "error",
-                "Couldn't delete faculty! Please try again!"
-            );
-            res.redirect("/getShowFaculty/" + id);
-        })
-}

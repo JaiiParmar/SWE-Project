@@ -53,8 +53,8 @@ exports.listPrograms = (req, res, next) => {
 
     Program.find({}).exec()
         .then((programs) => {
-            if (!programs) {
-                res.render('noData', {
+            if (programs.length < 1) {
+                return res.render('noData', {
                     feedBack: "No Program Found",
                     errorMessage: mError,
                     okMessage:mOk
@@ -226,8 +226,8 @@ exports.listCourses = (req, res, next) => {
 
     Course.find({}).exec()
         .then((courses) => {
-            if (!courses) {
-                res.render('noData', {
+            if (courses.length < 1) {
+                return res.render('noData', {
                     feedBack: "No Course Found",
                     errorMessage: mError,
                     okMessage: mOk
@@ -395,8 +395,8 @@ exports.listFaculty = (req, res, next) => {
   User.find()
     .where({ role: "faculty" })
     .then((faculties) => {
-      if (!faculties) {
-          res.render('noData', {
+      if (faculties.length < 1) {
+          return res.render('noData', {
               feedBack: "No Faculty Found",
               errorMessage: mError,
               okMessage: mOk

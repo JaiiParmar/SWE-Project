@@ -9,6 +9,21 @@ const Question = require("../models/question");
 
 exports.getCreateQuestion = (req, res, next) => {
 
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
+
     let message = null;
     const id = req.user._id;
     const classId = req.params.classId
@@ -30,7 +45,9 @@ exports.getCreateQuestion = (req, res, next) => {
                     program: mmClass.program,
                     course: mmClass.course,
                     topics: mmClass.topics,
-                }
+                },
+                errorMessage: mError,
+                okMessage:mOk
             });
         })
         .catch(error => {
@@ -39,8 +56,6 @@ exports.getCreateQuestion = (req, res, next) => {
             res.render('noData', { message: message })
         });
 }
-
-
 
 
 exports.createQuestion = (req, res, next) => {
@@ -102,46 +117,75 @@ exports.createQuestion = (req, res, next) => {
         message = null;
         if (err) {
             console.log(`Error Fetching Class : ${err.message}`);
-            message = "Opps! Something's wrong! Please try again later."
+            req.flash('error', "Couldn't add the question!");
             res.render('noData', { message: message })
         }
-        console.log("Question Added!");
-
-        this.getCreateQuestion(req, res, next);//temp.................
+        req.flash('info', "Question Added!");
+        res.redirect('/getCreateQuestion/' + classId);
     });
 }
 
 
 exports.getListQuestions = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     let message = null;
     const classId = req.params.classId;
+
     Question.find({class:classId})
         .then(mQuestions => {
-            if (!mQuestions) {
-                console.log(mQuestions);
-                message = 'No Questions'
+            if (mQuestions.length < 1) {
+                res.render('noData', {
+                    feedBack: "No Questions!Please add Questions!"
+                })
             }
-            console.log(mQuestions[3].options);
-
-            // res.render('listQuestions', {
-            //     mQuestions: mQuestions
-            // });
             res.render('listQuestions', {
-                 mQuestions: mQuestions
+                mQuestions: mQuestions,
+                errorMessage: mError,
+                okMessage: mOk,
             });
         })
         .catch(error => {
             console.log(`Error Fetching Class : ${error.message}`);
             message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { message: message })
+            res.render('noData', { feedBack: message })
         });
 }
 
 exports.getDetailsQuestions = (req, res, next) => {
 
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
+
     const questionId = req.params.questionId;
     const facId = req.user._id;
     let topics = null;
+
     Question.findById(questionId)
         .then(mQuestion => {
             if (!mQuestion) {
@@ -163,7 +207,10 @@ exports.getDetailsQuestions = (req, res, next) => {
                     }
 
                     res.render('questionDetails', {
-                        mQuestion: mQuestion, mTopics: mmClass.topics
+                        mQuestion: mQuestion,
+                        mTopics: mmClass.topics,
+                        errorMessage: mError,
+                        okMessage: mOk
                     })
                 })
                 .catch(error => {
@@ -226,13 +273,13 @@ exports.updateQuestion = (req, res, next) => {
         }
     })
         .then(result => {
-            console.log("Question Updated!");
-            res.redirect('/listQuestions/'+classId)
+            req.flash('info', "Question Updated!")
+            res.redirect('/questionDetails/' + questionId)
         })
         .catch(error => {
             console.log(`Error Fetching Class : ${error.message}`);
-            message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { message: message })
+            req.flash('error', "Counldn't Update the Question")
+            res.redirect('/questionDetails/' + questionId)
         });
 }
 
@@ -244,12 +291,12 @@ exports.deleteQuestion = (req, res, next) => {
 
     Question.findByIdAndDelete(questionId)
         .then(result => {
-            console.log("Question Updated!");
+            req.flash('info', "Question Deleted!")
             res.redirect('/listQuestions/' + classId)
         }).catch(error => {
             console.log(`Error Fetching Class : ${error.message}`);
-            message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { message: message })
+            req.flash('error', "Counldn't Delete the Question")
+            res.redirect('/listQuestions/' + classId)
         });
 }
 

@@ -267,7 +267,6 @@ exports.saveQuestionPapaer = (req, res, next) => {
                 time_duration: timeDuration,
                 exam_name: examName,
             });
-            console.log();
             mQuestionPaper.save()
                 .then(result => {
                     res.redirect('/viewQuestionPaper/' + mQuestionPaper._id);
@@ -333,7 +332,6 @@ exports.listQuestionPaper = (req, res, next) => {
 
 exports.viewQuestionPaper = (req, res, next) => {
     const questionPaperId = req.params.qpId;
-    console.log(questionPaperId);
     QuestionPaper.findById(questionPaperId)
         .then(mQuestionPaper => {
             console.log(mQuestionPaper.questions[0]);
