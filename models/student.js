@@ -4,16 +4,19 @@ const Schema = mongoose.Schema;
 const studentSchema = new Schema({
     _id: {
         type: String,
-        ref: 'user',
+        maxlength: 50,
+        required: true,
+        unique: true,
     },
     program: {
         type: String,
         ref:'program'
     },
     batch:{
-        type: Date,
+        type:Date,
     },
 });
 
 //Export model
+
 module.exports = mongoose.model("student", studentSchema);

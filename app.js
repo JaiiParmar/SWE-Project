@@ -20,8 +20,6 @@ const db = "paper_generator"; // database name
 
 const MONGODB_URI = `mongodb://${host}:${port}/${db}`;
 
-
-
 const app = express();
 //const csrfProtection = csrf();
 const store = new MongoDBStore({
