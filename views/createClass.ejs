@@ -7,11 +7,11 @@
 	<nav aria-label="breadcrumb"></nav>
 <div align="center">
 	<% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
 							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
 						</div>
 					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
+						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
 							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
 						</div>
 	<%}%>
@@ -22,7 +22,7 @@
 				<input type="hidden" name="fid" value="<%= user.email %>">
 				<div class="wrap-input1 validate-input" data-validate = "required">
 					<!--<textarea class="input1" name="message" placeholder="Message"></textarea>-->
-					<select class="input1" name="fprogram">
+					<select class="input1"  name="fprogram" required>
 						<option>--Select Program --</option>
 						<% for(let i=0; i < programs.length; i++) {  %>
 							<option value="<%= programs[i]._id %>"><%= programs[i]._id %></option>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="wrap-input1 validate-input" data-validate = "required">
 					<!--<textarea class="input1" name="message" placeholder="Message"></textarea>-->
-					<select class="input1" name="fcourse">
+					<select class="input1" name="fcourse" required>
 						<option>--Select Course --</option>
 						<% for(let i=0; i < courses.length; i++) {  %>
 							<option value="<%= courses[i]._id %>"><%= courses[i]._id %></option>

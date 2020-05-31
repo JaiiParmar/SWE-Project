@@ -35,6 +35,8 @@ const userSchema = new Schema({
     required: true,
     default: true,
   },
+  resetToken: String,
+  resetTokenExpiration:Date 
 });
 
 //Export model

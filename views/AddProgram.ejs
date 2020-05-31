@@ -5,44 +5,34 @@
 						Add Program
 					</span>
 
-					<% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+				<% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
 						</div>
 					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
 						</div>
 					<%}%>
 
 					<form class="contact1-form validate-form" align="left" action="addProgram" method="post">
 
 						<div class="wrap-input1 `validate-input" data-validate = "Program Id is required">
-						<input class="input1" type="text" name="pid" placeholder="Program ID">
+						<input class="input1" type="text" required name="pid" placeholder="Program ID">
 						<span class="shadow-input1"></span>
 					</div>
 
-					<div class="wrap-input1 validate-input" data-validate = "Program Name is required">
-						<input class="input1" type="text" name="pname" placeholder="Program Name">
+					<div class="wrap-input1 validate-input"  data-validate = "Program Name is required">
+						<input class="input1" type="text" required name="pname" placeholder="Program Name">
 						<span class="shadow-input1"></span>
 					</div>
 					<div class="wrap-input1 validate-input" data-validate = "required: ex: 3">
-						<input class="input1" type="text" name="duration" placeholder="Duration in Years">
+						<input class="input1" type="text" required name="duration" placeholder="Duration in Years">
 						<span class="shadow-input1"></span>
 					</div>
 					<tr><td colspan=2></td></tr>
 					<tr>
 					<td colspan=2>
-					<div class="wrap-input1 validate-input" data-validate = "Message is required">
-						<!--<textarea class="input1" name="message" placeholder="Message"></textarea>
-						<select class="input1">
-							<option>--Select--</option>
-							<option>okk</option>
-							<option>okk2</option>
-							<option>okk3</option>
-						</select>
-						<span class="shadow-input1"></span>
-					</div></td></tr>-->
 					<div class="container-contact1-form-btn">
 						<button type="submit" class="contact1-form-btn" onclick="addprogram">
 							<span>

@@ -1,12 +1,12 @@
 <%- include('partials/headerAdmin.ejs') %>
 <div align="center">
-					<% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+				<% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
 						</div>
 					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
 						</div>
 					<%}%>
 
@@ -18,7 +18,7 @@
 					<input type="hidden" name="role" value="student">
 
 					<div class="wrap-input1 validate-input" data-validate = "Name is required">
-						<input class="input1" disabled type="text" name="program" placeholder="Student Name" value="<%=programId%>">
+						<input class="input1" disabled type="text"  name="program" placeholder="Student Name" value="<%=programId%>">
 						<span class="shadow-input1"></span>
 					</div>
 
@@ -28,12 +28,12 @@
 					</div>
 
 					<div class="wrap-input1 validate-input" data-validate = "Email is required">
-						<input class="input1" type="text" name="email" placeholder="Student E-Mail">
+						<input class="input1" type="text" name="email" required placeholder="Student E-Mail">
 						<span class="shadow-input1"></span>
 					</div>
 
 					<div class="wrap-input1 validate-input" data-validate = "Password is required">
-						<input class="input1" type="password" name="pass" placeholder="Password">
+						<input class="input1" type="password" name="pass" required placeholder="Password">
 						<span class="shadow-input1"></span>
 					</div>
 

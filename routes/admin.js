@@ -61,9 +61,6 @@ router.post('/getShowCourse/updateCourse/:id', isAuth, isAdmin, adminController.
 
 
 
-
-
-
 //*********************************************************************************** */
                     /**Faculty Routes */
 

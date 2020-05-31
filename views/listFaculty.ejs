@@ -88,13 +88,13 @@
     <div class="app-content" style="padding-top: 40px;"><nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white"><button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button></nav><nav aria-label="breadcrumb"></nav>
 <div class="container">
      <div align="center">
-                    <% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 16px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
+                   <% if(errorMessage) {%>
+						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
 						</div>
 					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #58D53B; padding: 30px; width: 30%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 16px; font-weight: bold; color:#58D53B; padding:auto; "><%= okMessage %> </h5>
+						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
+							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
 						</div>
 					<%}%>
 </div>

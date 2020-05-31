@@ -49,6 +49,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: store,
+   // cookie: { maxAge: new Date(Date.now() + (3600 * 1000)) } //for an hour
   })
 );
 

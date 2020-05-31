@@ -56,14 +56,12 @@ exports.listPrograms = (req, res, next) => {
             if (programs.length < 1) {
                 return res.render('noData', {
                     feedBack: "No Program Found",
-                    errorMessage: mError,
-                    okMessage:mOk
                 })
             }
             res.render('listProgram', {
                 errorMessage: mError,
                 okMessage:mOk,
-                programs: programs
+                programs: programs,
             })
         })
         .catch((err) => {
@@ -120,21 +118,33 @@ exports.addProgram = (req, res, next) => {
     const name = req.body.pname
     const duration = req.body.duration
 
-    const nProgram = new Program({
-        _id: id,
-        name: name,
-        duration: duration
-    })
-    nProgram.save((err) => {
-        message = null;
-        if (err) {
-            console.error(err);
-            req.flash("error", "Sorry! Could not Add the Program!");
-        } else {
-            req.flash("info", "Program Added!");
-        }
-        res.redirect('/getAddProgram')
-    });
+    Program.findOne({ _id: id })
+        .then((prog) => {
+            if (prog) {
+                req.flash(
+                    "error",
+                    "Program exists already."
+                );
+                return res.redirect('/getAddProgram')
+            }
+            else {
+                const nProgram = new Program({
+                    _id: id,
+                    name: name,
+                    duration: duration
+                })
+                nProgram.save((err) => {
+                    message = null;
+                    if (err) {
+                        console.error(err);
+                        req.flash("error", "Sorry! Could not Add the Program!");
+                    } else {
+                        req.flash("info", "Program Added!");
+                    }
+                    res.redirect('/getAddProgram')
+                });
+            }
+        })
 }
 
 //Update the Program
