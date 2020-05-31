@@ -2,6 +2,8 @@
 
 //for each Request it will check for the authentication....
 const isAuth = require("../middleware/is-auth");
+const isFaculty = require('../middleware/is-faculty')
+
 const express = require("express");
 
 const facultyController = require("../controllers/faculty-controller");
@@ -14,27 +16,27 @@ const router = express.Router();
                 /** CRUD Class and CRUD Topics */
 //***********************************************************************************/
 
-router.get("/getCreateClass", isAuth, facultyController.getCreateClass);
+router.get("/getCreateClass", isAuth, isFaculty, facultyController.getCreateClass);
 
-router.post("/createClass", isAuth, facultyController.createClass);
+router.post("/createClass", isAuth, isFaculty, facultyController.createClass);
 
-router.get('/listTopics/:cid', isAuth, facultyController.listTopics);
+router.get('/listTopics/:cid', isAuth, isFaculty,  facultyController.listTopics);
 
-router.get("/listClasses", isAuth, facultyController.getListClass);
+router.get("/listClasses", isAuth, isFaculty,  facultyController.getListClass);
 
-router.get("/classDetails/:cid", isAuth, facultyController.getDetailsClass);
+router.get("/classDetails/:cid", isAuth, isFaculty,  facultyController.getDetailsClass);
 
-router.get("/deleteClass/:cid", isAuth, facultyController.deleteClass);
+router.get("/deleteClass/:cid", isAuth, isFaculty, facultyController.deleteClass);
 
-router.get("/getCreateTopic/:cid", isAuth, facultyController.getCreateTopic);
+router.get("/getCreateTopic/:cid", isAuth, isFaculty, facultyController.getCreateTopic);
 
-router.post("/createTopic/:cid", isAuth, facultyController.createTopic);
+router.post("/createTopic/:cid", isAuth, isFaculty, facultyController.createTopic);
 
-router.get("/getTopicDetails/:cid/:tid", isAuth, facultyController.getTopicDetails);
+router.get("/getTopicDetails/:cid/:tid", isAuth, isFaculty,  facultyController.getTopicDetails);
 
-router.post("/updateTopic/:cid/:tid", isAuth, facultyController.updateTopic);
+router.post("/updateTopic/:cid/:tid", isAuth, isFaculty,  facultyController.updateTopic);
 
-router.get("/deleteTopic/:cid/:tid", isAuth, facultyController.deleteTopic);
+router.get("/deleteTopic/:cid/:tid", isAuth, isFaculty,  facultyController.deleteTopic);
 
 
 
@@ -42,17 +44,17 @@ router.get("/deleteTopic/:cid/:tid", isAuth, facultyController.deleteTopic);
                 /** CRUD Questions... */
 //***********************************************************************************/
 
-router.get("/getCreateQuestion/:classId", isAuth, questionBankController.getCreateQuestion);
+router.get("/getCreateQuestion/:classId", isAuth, isFaculty,  questionBankController.getCreateQuestion);
 
-router.post("/createQuestion/:classId", isAuth, questionBankController.createQuestion)
+router.post("/createQuestion/:classId", isAuth, isFaculty,  questionBankController.createQuestion)
 
-router.get("/listQuestions/:classId", isAuth, questionBankController.getListQuestions);
+router.get("/listQuestions/:classId", isAuth, isFaculty,  questionBankController.getListQuestions);
 
-router.get("/questionDetails/:questionId", isAuth, questionBankController.getDetailsQuestions);
+router.get("/questionDetails/:questionId", isAuth, isFaculty,  questionBankController.getDetailsQuestions);
 
-router.post("/updateQuestion/:questionId", isAuth, questionBankController.updateQuestion);
+router.post("/updateQuestion/:questionId", isAuth, isFaculty,  questionBankController.updateQuestion);
 
-router.get("/deleteQuestion/:questionId/:classId", isAuth, questionBankController.deleteQuestion);
+router.get("/deleteQuestion/:questionId/:classId", isAuth, isFaculty, questionBankController.deleteQuestion);
 
 
 
@@ -61,17 +63,17 @@ router.get("/deleteQuestion/:questionId/:classId", isAuth, questionBankControlle
 //***********************************************************************************/
 
 
-router.get('/getGenerateQuestionpaper/:classId', isAuth, questionPaperController.getGenerateQuestionPaper)
+router.get('/getGenerateQuestionpaper/:classId', isAuth, isFaculty,  questionPaperController.getGenerateQuestionPaper)
 
-router.post('/generateQuestionPaper/:classId', isAuth, questionPaperController.generateQuestionPaper)
+router.post('/generateQuestionPaper/:classId', isAuth, isFaculty,  questionPaperController.generateQuestionPaper)
 
-router.post('/questionPaper', isAuth, questionPaperController.createQuestionPaper)
+router.post('/questionPaper', isAuth, isFaculty,  questionPaperController.createQuestionPaper)
 
-router.post('/saveQuestionPaper', isAuth, questionPaperController.saveQuestionPapaer)
+router.post('/saveQuestionPaper', isAuth, isFaculty, questionPaperController.saveQuestionPapaer)
 
-router.get('/listQuestionPapers/:classId', isAuth, questionPaperController.listQuestionPaper)
+router.get('/listQuestionPapers/:classId', isAuth, isFaculty,  questionPaperController.listQuestionPaper)
 
-router.get('/viewQuestionPaper/:qpId', isAuth, questionPaperController.viewQuestionPaper)
+router.get('/viewQuestionPaper/:qpId', isAuth, isFaculty,  questionPaperController.viewQuestionPaper)
 
 //***********************************************************************************/
 
