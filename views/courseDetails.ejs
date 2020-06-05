@@ -18,7 +18,19 @@
         margin: 50px 10px;
     }
 </style>
-    <div class="app-content" style="padding-top: 40px;">
+<%	if (errorMessage) { %>
+    <div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <%= errorMessage %>
+      </div>
+
+<% } else if(okMessage){%>
+    <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <%= okMessage %>
+                        </div>
+                    <%}%>
+<div class="app-content" style="padding-top: 40px;">
         <nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
             <button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
         </nav>
@@ -33,7 +45,7 @@
                     </div>
                     <form action="updateCourse/<%= course._id%>" method="post">
                     <table>
-                        <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                        <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
@@ -43,34 +55,34 @@
                                  </div>
                         </tr>
 
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Name  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" value="<%= course.name%>" name="cname" placeholder="Course code" required="required>
+                            <td><input class="input1" type="text" value="<%= course.name%>" name="cname" placeholder="Course code" required>
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Optional  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" value="<%= course.optional%>" name="coptional" placeholder="Course code" required="required>
+                            <td><input class="input1" type="text" value="<%= course.optional%>" name="coptional" placeholder="Course code" required>
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Active  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" value="<%= course.active%>"name="cactive" placeholder="Course code" required="required>
+                            <td><input class="input1" type="text" value="<%= course.active%>"name="cactive" placeholder="Course code" required>
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>

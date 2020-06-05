@@ -1,8 +1,8 @@
 const crypto = require('crypto')
 
 const bcrypt = require("bcryptjs"); //for enrypting the password
-
 const User = require("../models/user");
+const Faculty = require('../models/faculty')
 
 //render the login.ejs page.
 exports.getLogin = (req, res, next) => {
@@ -21,7 +21,7 @@ exports.getLogin = (req, res, next) => {
     mError = mOk = null
   }
 
-  res.render("login",{
+   res.render("login",{
     //path: "/login",
     pageTitle: "Login",
     errorMessage: mError,
@@ -36,11 +36,14 @@ exports.getLogin = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-
   User.findOne({ _id: email })
     .then((user) => {
       if (!user) {
         req.flash("error", "Invalid email or password.");
+        return res.redirect("/");
+      }
+      else if (!user.active) {
+        req.flash("error", "Account is Deactiveted by Admin!");
         return res.redirect("/");
       }
       bcrypt
@@ -56,9 +59,26 @@ exports.postLogin = (req, res, next) => {
                 name: user.name,
                 email: user._id
               }
+              if (user.role === 'faculty') {
+                Faculty.findById(user._id)
+                  .then(fac => {
+                    if (!fac)
+                      res.locals.classes = []
+                    else
+                      res.locals.classes = fac.classes
+                    res.render("dashboard", {
+                      user: user_details
+                    });
+                  })
+                  .catch(err => {
+                    console.log("this is err :", err);
+                  })
+              }
+              else {
                 res.render("dashboard", {
                   user: user_details
                 });
+              }
             });
           }
           req.flash("error", "Invalid email or password.");
@@ -80,6 +100,8 @@ exports.postLogout = (req, res, next) => {
     res.redirect("/");
   });
 };
+
+
 
 
 exports.getForgotPassword = (req, res, next) => {
@@ -131,7 +153,7 @@ exports.resetPassword = (req, res, next) => {
       })
       .then((result) => {
 
-        res.redirect('/getNewPassword/'+ token)
+        res.redirect('/getNewPassword/' + token)
 
         //**Mailing Service. */
         // const smtpTransport = nodemailer.createTransport({
@@ -181,21 +203,21 @@ exports.getNewPassword = (req, res, next) => {
   User.findOne({
     resetToken: token,
     resetTokenExpiration: {
-      $gt:Date.now()
+      $gt: Date.now()
     }
   })
     .then(user => {
       res.render('newPassword', {
         pageTitle: "Reset Password",
         userId: user._id.toString(),
-        passwordToken:token
+        passwordToken: token
       })
     })
     .catch(err => {
       console.log(err);
       req.flash('error', "Something's wrong Please Try Again Later!")
       res.redirect('/')
-  })
+    })
 }
 
 
@@ -229,8 +251,9 @@ exports.updatePassword = (req, res, next) => {
       console.log(err);
       req.flash('error', "Counld'n change the password!")
       res.redirect('/');
-  })
+    })
 }
+
 
 
 

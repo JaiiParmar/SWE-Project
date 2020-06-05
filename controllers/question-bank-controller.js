@@ -78,8 +78,6 @@ exports.createQuestion = (req, res, next) => {
     const op4 = req.body.option4;
     const options = [];
 
-    console.log(topic);
-
     if (type !== 'theory') {
         if (type === 'true/false') {
             options.push('true');
@@ -228,8 +226,6 @@ exports.getDetailsQuestions = (req, res, next) => {
 
 
 exports.updateQuestion = (req, res, next) => {
-    console.log("Updating... ");
-
     const questionId = req.params.questionId;
     const classId = req.body.classId;
     //const topic = req.body.mtopic;
@@ -246,6 +242,10 @@ exports.updateQuestion = (req, res, next) => {
     const op4 = req.body.option4;
     const options = [];
 
+    let isPublic = false;
+    if (req.body.public === "public" ) {
+        isPublic = true;
+    }
 
     if (type !== 'theory') {
         if (type === 'true/false') {
@@ -265,11 +265,12 @@ exports.updateQuestion = (req, res, next) => {
     }
     Question.findByIdAndUpdate(questionId, {
         $set: {
-                text: question,
-                note: note,
-                mark: mark,
-                options: options,
-                answer: answer,
+            text: question,
+            note: note,
+            mark: mark,
+            options: options,
+            answer: answer,
+            public: isPublic,
         }
     })
         .then(result => {
@@ -301,3 +302,62 @@ exports.deleteQuestion = (req, res, next) => {
 }
 
 
+
+
+exports.getPublicQuestionForStudents = (req, res, next) => {
+
+    const fid = req.body.faculty;
+    const pid = req.body.program;
+    const cid = req.body.course;
+
+    //if no type is seleceted.... selecte all type of questions...
+    let types = req.body.mTypes;
+    if (!types) {
+        types = ['theory', 'mcq', 'yes/no', 'true/false']
+    }
+    let difficulty = req.body.mDiff;
+    if (!difficulty) {
+        difficulty = ['easy', 'hard', 'medium']
+    }
+    Question.find({
+        faculty: fid,
+        program: pid,
+        course: cid,
+        type: types,
+        difficulty: difficulty,
+        public: true
+    })
+        .then(mQuestions => {
+            if (mQuestions.length < 1) {
+                res.render('noData', {
+                    feedBack: "No Questions!"
+                })
+            }
+            res.render('listPublicQuestions', {
+                mQuestions: mQuestions,
+                errorMessage: null,
+                okMessage: null,
+            });
+        })
+        .catch(error => {
+            console.log(`Error Fetching Class : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { feedBack: message })
+        });
+}
+
+
+exports.getQuestionDetailsForStudents = (req, res, next) => {
+    const questionId = req.params.qId;
+    Question.findById(questionId)
+        .then(mQuestion => {
+            res.render('sQuestionDetails', {
+                mQuestion: mQuestion,
+            })
+        })
+        .catch(error => {
+            console.log(`Error Fetching Class : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { message: message })
+        });
+}

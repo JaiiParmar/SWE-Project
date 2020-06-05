@@ -1,8 +1,8 @@
 <%- include('partials/headerAdmin.ejs') %>
-
 <style type="text/css">
     body {
         color: #404E67;
+
         font-family: 'Open Sans', sans-serif;
     }
     .table-wrapper {
@@ -85,65 +85,56 @@
     }
 </style>
 
-<div class="app-content" style="padding-top: 40px;">
-    <div align="center">
-        <% if (errorMessage) { %>
-            <div class="alert alert-danger alert-dismissible" style="width: 50%;text-align: center;">
+    <div class="app-content" style="padding-top: 40px;"><nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white"><button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button></nav><nav aria-label="breadcrumb"></nav>
+<div class="container">
+     <div align="center">
+        <%	if (errorMessage) { %>
+            <div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <%= errorMessage %>
               </div>
-                             
+
         <% } else if(okMessage){%>
-            <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;">
+            <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <%= okMessage %>
                                 </div>
                             <%}%>
-
 </div>
-    <nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
-        <button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
-    </nav><nav aria-label="breadcrumb"></nav>
-<div class="container">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Program <b>Details</b></h2></div>
+                    <div class="col-sm-8"><h2>Student <b>Details</b></h2></div>
                     <div class="col-sm-4">
-                        <a href="/getAddProgram"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button></a>
+                        <a href="/getAddStudent/<%=sProgram%>"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button></a>
                     </div>
                 </div>
             </div>
+
                 <table class="table table-bordered" id="data">
                 <thead>
                     <tr>
                         <th style="background-color: #2e8cc2; opacity:0.9; width:50px">ID</th>
-                        <th style="background-color: #2e8cc2; opacity:0.9">Program ID</th>
-                        <th style="background-color: #2e8cc2; opacity:0.9">Program-Name</th>
-                        <th style="background-color: #2e8cc2; opacity:0.9">Duration(in Year)</th>
-                        <th style="background-color: #2e8cc2; opacity:0.9">Actions</th>
+                        <th style="background-color: #2e8cc2; opacity:0.9">Name</th>
+                        <th style="background-color: #2e8cc2; opacity:0.9">Email-Name</th>
+                         <th style="background-color: #2e8cc2; opacity:0.9">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% for(var i=0; i < programs.length; i++) {%>
-                       <a href=""><tr>
-                            <td><%= i + 1%></td>
-                            <td><%= programs[i]._id %></td>
-                            <td><%= programs[i].name %></td>
-                            <td><%= programs[i].duration %></td>
-                            <td>
-                                <a href="getShowProgram/<%= programs[i]._id %>" class='edit' title='Edit' data-toggle='tooltip'><i class='material-icons'>&#xE254;</i></a>
-                            </td>
-                        </tr>
-                        </a>
-                        <% } %>
+                    <% for(var i=0; i < students.length; i++) {%>
+                    <tr>
+                        <input type="hidden" name="_id" value="<%= students[i]._id %>">
+                        <td><%= i + 1 %></td>
+                        <td><%= students[i].name %></td>
+                        <td><%= students[i]._id %></td>
+                        <td>
+                            <a href="/getShowStudent/<%=sProgram%>/<%= students[i]._id %>" class='edit' title='Edit' data-toggle='tooltip'><i class='material-icons'>&#xE254;</i></a>
+                        </td>
+                    </tr>
+                    <% } %>
                 </tbody>
             </table>
             </div>
     </div>
-
-
-
-
-
 </div></div></div>
+

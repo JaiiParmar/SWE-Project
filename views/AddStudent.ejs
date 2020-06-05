@@ -1,14 +1,17 @@
 <%- include('partials/headerAdmin.ejs') %>
 <div align="center">
-				<% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
-						</div>
-					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
-						</div>
-					<%}%>
+	<%	if (errorMessage) { %>
+		<div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<%= errorMessage %>
+		  </div>
+
+	<% } else if(okMessage){%>
+		<div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<%= okMessage %>
+							</div>
+						<%}%>
 
 	<form class="contact1-form validate-form" id="subTypeForm" method="post"
 	 action="/addStudent/<%=programId%>" >
@@ -17,26 +20,30 @@
 					</span>
 					<input type="hidden" name="role" value="student">
 
-					<div class="wrap-input1 validate-input" data-validate = "Name is required">
-						<input class="input1" disabled type="text"  name="program" placeholder="Student Name" value="<%=programId%>">
+					<div class="wrap-input1 validate-input"  >
+						<input class="input1" disabled type="text" name="program" placeholder="Student Name" value="<%=programId%>">
 						<span class="shadow-input1"></span>
 					</div>
 
-					<div class="wrap-input1 validate-input" data-validate = "Name is required">
+					<div class="wrap-input1 validate-input"  >
 						<input class="input1" type="text" name="name" placeholder="Student Name">
 						<span class="shadow-input1"></span>
 					</div>
 
-					<div class="wrap-input1 validate-input" data-validate = "Email is required">
+					<div class="wrap-input1 validate-input" >
 						<input class="input1" type="text" name="email" required placeholder="Student E-Mail">
 						<span class="shadow-input1"></span>
 					</div>
 
-					<div class="wrap-input1 validate-input" data-validate = "Password is required">
-						<input class="input1" type="password" name="pass" required placeholder="Password">
+					<div class="wrap-input1 validate-input"  >
+						<input class="input1" type="password" name="password" required placeholder="Password">
 						<span class="shadow-input1"></span>
 					</div>
 
+					<div class="wrap-input1 validate-input"  >
+						<input class="input1" type="text" name="batch" placeholder="Student Batch">
+						<span class="shadow-input1"></span>
+					</div>
 
 					<div class="container-contact1-form-btn">
 						<button type="submit" class="contact1-form-btn" form="subTypeForm" type="submit" name="stsub">

@@ -29,12 +29,12 @@ exports.getCreateClass = (req, res, next) => {
     }
 
     const message = '';
-    Program.find({}).exec()
+    Program.find({active:true}).exec()
         .then((programs) => {
             if (!programs)
                 message = message + 'No Programs! '
 
-            Course.find({}).exec()
+            Course.find({active:true}).exec()
                 .then((courses) => {
                     if (!courses) {
                          message = message + 'No Courses!'
@@ -68,28 +68,50 @@ exports.createClass = (req, res, next) => {
     const id = req.body.fid;
     const programId = req.body.fprogram;
     const courseId = req.body.fcourse;
+    let exist = false
+    //check if the class alrealy exist!!
+    Faculty.findById(id)
+        .then(ress => {
 
-    //make sure that the entry is unique.
-    Faculty.findByIdAndUpdate(id,
-        {
-            $push: {
-                classes: [{
-                    program: programId,
-                    course: courseId
-                }]
+        for (let i = 0; ress.classes[i]; i++){
+            if (ress.classes[i].program === programId && ress.classes[i].course === courseId) {
+                exist = true
+
             }
-        })
-        .then(result => {
-            console.log("Class Created  -> " + programId + ' : ' + courseId);
-            req.flash('info', "Class Created!")
-            res.redirect('/getCreateClass');
-        })
-        .catch(error => {
-            console.log(`Error Creating Class : ${error.message}`);
-            req.flash('error', "Couldn't create the class!")
-            res.redirect('/getCreateClass');
-        });
+        }
 
+    }).then(ress => {
+        //make sure that the entry is unique.
+        if (exist) {
+            req.flash('error', "Class Exist Already!")
+            res.redirect('/getCreateClass');
+        }
+        else {
+            Faculty.findByIdAndUpdate(id,
+                {
+                    $push: {
+                        classes: [{
+                            program: programId,
+                            course: courseId
+                        }]
+                    }
+                })
+                .then(result => {
+                    req.flash('info', "Class Created!")
+                    res.redirect('/getCreateClass');
+                })
+                .catch(error => {
+                    console.log(`Error Creating Class : ${error.message}`);
+                    req.flash('error', "Couldn't create the class!")
+                    res.redirect('/getCreateClass');
+                });
+        }
+
+    }).catch(error => {
+        console.log(`Error Creating Class : ${error.message}`);
+        req.flash('error', "Couldn't create the class!")
+        res.redirect('/getCreateClass');
+    });
 }
 
 
@@ -138,8 +160,20 @@ exports.getDetailsClass = (req, res, next) => {
 
     let message = null;
     const id = req.user._id;
-    const classId = req.params.cid
+    const classId = req.params.cid;
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
 
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
     Faculty.findById(id)
         .then(mClass => {
             if (!mClass) {
@@ -158,6 +192,8 @@ exports.getDetailsClass = (req, res, next) => {
                     program: mmClass.program,
                     course: mmClass.course,
                     topics:mmClass.topics,
+                    errorMessage: mError,
+                    okMessage: mOk
                 }
             });
         })
@@ -203,8 +239,22 @@ exports.deleteClass = (req, res, next) => {
 
 exports.getCreateTopic = (req, res, next) => {
 
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
     const id = req.user._id;
     const classId = req.params.cid;
+
     Faculty.findById(id)
         .then(mClass => {
             if (!mClass) {
@@ -223,14 +273,16 @@ exports.getCreateTopic = (req, res, next) => {
                 mClass: {
                     classId: classId,
                     program: program,
-                    course: course,
-                }
+                    course: course
+
+                },errorMessage: mError,
+                okMessage: mOk
             })
         })
         .catch(error => {
             console.log(`Error Fetching Class : ${error.message}`);
             message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { feedBack: message })
+            res.render('noData', { feedBack: message})
         });
 }
 
@@ -240,7 +292,6 @@ exports.createTopic = (req, res, next) => {
     const id = req.user._id
     const classId = req.params.cid
     const topic = req.body.tname
-
     //make sure that the entry is unique.
     Faculty.updateOne({ "_id": id, "classes._id": classId },
         {
@@ -263,7 +314,6 @@ exports.createTopic = (req, res, next) => {
 
 
 exports.listTopics = (req, res, next) => {
-
     let mError = req.flash("error");
     let mOk = req.flash("info");
 
@@ -277,7 +327,6 @@ exports.listTopics = (req, res, next) => {
     else {
         mError = mOk = null
     }
-
     let message = null;
     const id = req.user._id;
     const classId = req.params.cid
@@ -299,14 +348,15 @@ exports.listTopics = (req, res, next) => {
                     program: mmClass.program,
                     course: mmClass.course,
                     topics: mmClass.topics,
-                }, errorMessage: mError,
-                okMessage: mOk
+                    errorMessage: mError,
+                    okMessage: mOk
+                },
             });
         })
         .catch(error => {
             console.log(`Error Fetching Class : ${error.message}`);
             message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { feedBack: message })
+            res.render('noData', { feedBack: message})
         });
 }
 
@@ -350,9 +400,8 @@ exports.getTopicDetails = (req, res, next) => {
                     program: program,
                     course: course,
                     topic: topic,
-
-                }, errorMessage: mError,
-                okMessage: mOk
+                    },errorMessage: mError,
+                    okMessage: mOk
 
             })
         })

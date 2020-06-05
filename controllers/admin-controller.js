@@ -2,17 +2,18 @@
 const Program = require("../models/program");
 const Course = require("../models/course");
 const Faculty = require("../models/faculty");
+const Student = require("../models/student")
 const User = require('../models/user');
 
 
 
 //*********************************************************************************** */
 /**Program Routes */
-
 //*********************************************************************************** */
 
 //render the AddProgram Page....
 exports.getAddProgram = (req, res, next) => {
+    console.log("Get: Add Program!");
 
     let mError = req.flash("error");
     let mOk = req.flash("info");
@@ -27,15 +28,17 @@ exports.getAddProgram = (req, res, next) => {
     else {
         mError = mOk = null
     }
-
+    console.log("Render: Add Program!");
     res.render("AddProgram",{
         errorMessage: mError,
         okMessage:mOk
     });
+
 };
 
 // Fetch Program and render it in listProgram.ejs
 exports.listPrograms = (req, res, next) => {
+    console.log("Get: list Program!");
 
     let mError = req.flash("error");
     let mOk = req.flash("info");
@@ -58,6 +61,7 @@ exports.listPrograms = (req, res, next) => {
                     feedBack: "No Program Found",
                 })
             }
+            console.log("Render: list Program!");
             res.render('listProgram', {
                 errorMessage: mError,
                 okMessage:mOk,
@@ -76,6 +80,7 @@ exports.listPrograms = (req, res, next) => {
 
 // fetch fet Single program and fetch it in programDetails.ejs
 exports.getProgramDetails = (req, res, next) => {
+    console.log("Get: Program Details!");
 
     let mError = req.flash("error");
     let mOk = req.flash("info");
@@ -97,6 +102,7 @@ exports.getProgramDetails = (req, res, next) => {
                 req.flash("error", "Couldn't find the Program");
                 return res.redirect("/listProgram");
             }
+            console.log("Render: Program Details!");
             res.render('programDetails', {
                 program: program,
                 errorMessage: mError,
@@ -113,6 +119,7 @@ exports.getProgramDetails = (req, res, next) => {
 
 // Add the program in the Database.
 exports.addProgram = (req, res, next) => {
+    console.log("Post: Add Program!");
 
     const id = req.body.pid
     const name = req.body.pname
@@ -141,6 +148,7 @@ exports.addProgram = (req, res, next) => {
                     } else {
                         req.flash("info", "Program Added!");
                     }
+                    console.log("Render: Add Program");
                     res.redirect('/getAddProgram')
                 });
             }
@@ -149,7 +157,7 @@ exports.addProgram = (req, res, next) => {
 
 //Update the Program
 exports.updateProgram = (req, res, next) => {
-
+    console.log("Post: Update Program !");
     const id = req.params.id
     const name = req.body.pname
     const duration = req.body.pduration
@@ -165,6 +173,7 @@ exports.updateProgram = (req, res, next) => {
         .then(result => {
             console.log("Program Updated!");
             req.flash('info', 'Program Updated!');
+            console.log("Render: Update Program !");
             res.redirect('/listProgram')
         })
         .catch(error => {
@@ -176,10 +185,12 @@ exports.updateProgram = (req, res, next) => {
 
 //Delete the Program
 exports.deleteProgram = (req, res, next) => {
+    console.log("Detele: Program !");
     const id = req.params.id;
     Program.findByIdAndDelete(id)
         .then(ress => {
-        req.flash('error', 'Program Deleted!');
+        req.flash('info', 'Program Deleted!');
+        console.log("Renter: List Program !");
         res.redirect('/listProgram');
     }).catch(err => {
         console.log(err.message);
@@ -188,16 +199,13 @@ exports.deleteProgram = (req, res, next) => {
      })
 };
 
-
-
-
 //*********************************************************************************** */
 /**Course Routes */
-
 //*********************************************************************************** */
 
 
 exports.getAddCourse = (req, res, next) => {
+    console.log("Get: AddCourse!");
     let mError = req.flash("error");
     let mOk = req.flash("info");
 
@@ -211,6 +219,7 @@ exports.getAddCourse = (req, res, next) => {
     else {
         mError = mOk = null
     }
+    console.log("Render: AddCourse !");
     res.render('AddCourse', {
         errorMessage: mError,
         okMessage: mOk
@@ -219,7 +228,7 @@ exports.getAddCourse = (req, res, next) => {
 
 //list course
 exports.listCourses = (req, res, next) => {
-
+    console.log("Get: list Course !");
     let mError = req.flash("error");
     let mOk = req.flash("info");
 
@@ -243,6 +252,7 @@ exports.listCourses = (req, res, next) => {
                     okMessage: mOk
                 })
             }
+            console.log("Render: listCourse !");
             res.render('listCourse', {
                 message: null,
                 errorMessage: mError,
@@ -260,6 +270,7 @@ exports.listCourses = (req, res, next) => {
 
 // Add course
 exports.addCourse = (req, res, next) => {
+    console.log("Post: Add Course !");
     const id = req.body.ccode
     const name = req.body.cname
 
@@ -273,16 +284,18 @@ exports.addCourse = (req, res, next) => {
         if (err) {
             console.error(err);
             req.flash("error", "Sorry! Could not Add the Course!");
+            console.log("Redirect: getAddCourse !");
             return res.redirect('/getAddCourse');
         }
         req.flash("info", "Course Added!");
+        console.log("Redirect: getAddCourse !");
         res.redirect('/getAddCourse')
     });
 };
 
 //Get Single program.
 exports.getCourseDetails = (req, res, next) => {
-
+    console.log("Get: get Course Details!");
     let mError = req.flash("error");
     let mOk = req.flash("info");
 
@@ -301,8 +314,10 @@ exports.getCourseDetails = (req, res, next) => {
         .then((course) => {
             if (!course) {
                 req.flash("error", "Couldn't find the Course");
+                console.log("Redirect: getAddCourse !");
                 return res.redirect("/listCourses");
             }
+            console.log("Render: Course Details!");
             res.render('courseDetails', {
                 course: course,
                 errorMessage: mError,
@@ -436,11 +451,6 @@ exports.listFaculty = (req, res, next) => {
 
 
 
-
-
-
-
-
 //*********************************************************************************** */
 /**Student's Routes */
 
@@ -470,3 +480,68 @@ exports.getAddStudent = (req, res, next) => {
     });
 
 }
+
+//list Student
+exports.listStudents = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+    const pid = req.params.pid;
+
+    Student.find({ program: pid })
+        .then((students) => {
+            if (students.length < 1) {
+                return res.render('noData', {
+                    feedBack: "No Students Found",
+                    errorMessage: mError,
+                    okMessage: mOk
+                })
+            }
+            User.find({ _id: { $in: students } })
+                .then((ustudents) => {
+                    if (ustudents.length < 1) {
+                        return res.render('noData', {
+                            feedBack: "No Students Found",
+                            errorMessage: mError,
+                            okMessage: mOk
+                        })
+                    }
+                    res.render("listStudents", {
+                        message: null,
+                        students: ustudents,
+                        sProgram: pid,
+                        errorMessage: mError,
+                        okMessage: mOk
+                    });
+                })
+                .catch((err) => {
+                    res.render("listStudents", {
+                        message: "NO RECORD FOUND",
+                        errorMessage: mError,
+                        okMessage: mOk
+                    });
+                });
+
+        })
+        .catch((err) => {
+            res.render("listStudents", {
+                message: "NO RECORD FOUND",
+                errorMessage: mError,
+                okMessage: mOk
+            });
+        });
+
+};
+
+

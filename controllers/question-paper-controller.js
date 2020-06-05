@@ -5,7 +5,6 @@ const Cache = require('../models/cacheQuestions');
 
 
 
-
 exports.getGenerateQuestionPaper = (req, res, next) => {
     let message = null;
     const id = req.user._id;
@@ -40,7 +39,6 @@ exports.getGenerateQuestionPaper = (req, res, next) => {
         });
 
 }
-
 
 
 exports.generateQuestionPaper = (req, res, next) => {
@@ -145,6 +143,11 @@ exports.createQuestionPaper = (req, res, next) => {
     const classId = req.body.classId;
     const mQuestionIds = req.body.finalQuestionIds;
 
+    if (!mQuestionIds) {
+        message = "No Qeustions Seleted"
+        res.render('noData', { feedBack: message })
+    }
+
     //Will do it using CacheQuestions....later...
     Question.find({ _id:{ "$in": mQuestionIds } })
         .then(mFinalQuestions => {
@@ -248,9 +251,9 @@ exports.saveQuestionPapaer = (req, res, next) => {
     Cache.findById(cacheId)
         .then(mQuestions => {
             if (!mQuestions) {
-                console.log(mQuestions);
-                message = 'No Classes'
+                res.render('noData', { feedBack: "No Questions" })
             }
+
             //save the question paper...
 
             const mQuestionPaper = new QuestionPaper({
@@ -286,16 +289,31 @@ exports.saveQuestionPapaer = (req, res, next) => {
 
 
 exports.listQuestionPaper = (req, res, next) => {
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
+
+
     let message = null;
     const classId = req.params.classId;
 
     QuestionPaper.find({ class: classId })
         .then(mQuestionPapers => {
-            if (!mQuestionPapers) {
-                console.log(mQuestionPapers);
-                message = 'No Questions'
+            if (!mQuestionPapers.length) {
+                console.log("NO QuestionsPapers");
+                res.render('noData', {feedBack:"No QuestionPapers"})
             }
-
             // res.render('listQuestions', {
             //     mQuestions: mQuestions
             // });
@@ -313,37 +331,158 @@ exports.listQuestionPaper = (req, res, next) => {
                     noOfQuestions: mQuestionPapers[i].total_question,
                     program: mQuestionPapers[i].program,
                     course: mQuestionPapers[i].course,
+                    public: mQuestionPapers[i].public
+
                 }
                 QuestionPaparDetails.push(mQuestionDetails)
             }
 
             res.render('listQuestionPapers', {
-                mQuestionPapers: QuestionPaparDetails
+                mQuestionPapers: QuestionPaparDetails,
+                errorMessage: mError,
+                okMessage: mOk
             });
 
         })
         .catch(error => {
             console.log(`Error Fetching QuestionPapers : ${error.message}`);
-            message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { message: message })
+            message = message || "Opps! Something's wrong! Please try again later."
+            res.render('noData', { feedBack: message })
         });
 }
 
 
 exports.viewQuestionPaper = (req, res, next) => {
+
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     const questionPaperId = req.params.qpId;
     QuestionPaper.findById(questionPaperId)
         .then(mQuestionPaper => {
-            console.log(mQuestionPaper.questions[0]);
             res.render('questionPaper', {
                 QuestionPaper: mQuestionPaper,
                 response_for: 'view',
-                feedBack: 'OK'
+                feedBack: 'OK',
+                errorMessage: mError,
+                okMessage: mOk
             })
         })
         .catch(error => {
             console.log(`Error Fetching QuestionPapers : ${error.message}`);
             message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { message: message })
+            res.render('noData', { feedBack: message })
         });
 }
+
+
+exports.deleteQuestionPaper = (req, res, next)=>{
+
+    const qpid = req.params.qpId;
+    const classId = req.params.cid;
+
+    QuestionPaper.findByIdAndDelete(qpid)
+        .then(result => {
+            req.flash('info', "QuestionPaper Deleted!")
+            res.redirect('/listQuestionPapers/' + classId)
+        }).catch(error => {
+            console.log(`Error Deleting QuestionPaper : ${error.message}`);
+            req.flash('error', "Counldn't Delete the QuestionPaper")
+            res.redirect('/listQuestionPapers/' + classId)
+        });
+}
+
+
+exports.changeAccess = (req, res, next) => {
+    //make sure that the entry is unique.
+    const id = req.params.qpId;
+    QuestionPaper.findById(id)
+        .then(Q => {
+            let public = false;
+            if (!Q.public) {
+                public = true
+            }
+            QuestionPaper.findByIdAndUpdate(id,
+                {
+                    $set: {
+                        public:public
+                    }
+                })
+                .then(result => {
+                    req.flash('info', "Access Changed!")
+                    res.redirect('/viewQuestionPaper/' + id);
+                })
+                .catch(error => {
+                    console.log(`Error Changing Access : ${error.message}`);
+                    req.flash('error', "Couldn't change the Access!")
+                    res.redirect('/viewQuestionPaper/' + id);
+                });
+        }).catch(error => {
+            console.log(`Error Changing Access : ${error.message}`);
+            req.flash('error', "Couldn't change the Access!")
+            res.redirect('/viewQuestionPaper/'+ id);
+        });
+
+}
+
+exports.getQuestionStudents = (req, res, next) => {
+
+    const fid = req.body.faculty;
+    const pid = req.body.program;
+    const cid = req.body.course;
+
+    let difficulty = req.body.mDiff;
+    if (!difficulty) {
+        difficulty = ['easy', 'hard', 'medium']
+    }
+
+    QuestionPaper.find({
+        faculty: fid,
+        program: pid,
+        course: cid,
+        difficulty: difficulty,
+        public: true
+    })
+        .then(mQuestionPapers => {
+            if (mQuestionPapers.length < 1) {
+                res.render('noData', {
+                    feedBack: "No QuestionsPaper!"
+                })
+            }
+            const QuestionPaparDetails = [' ']
+            QuestionPaparDetails.length = 0;
+
+            for (let i = 0; mQuestionPapers[i]; i++) {
+                const mQuestionDetails = {
+                    qpid: mQuestionPapers[i].id,
+                    examName: mQuestionPapers[i].exam_name,
+                    examDate: mQuestionPapers[i].exam_date,
+                    difficulty: mQuestionPapers[i].difficulty,
+                    totalMarks: mQuestionPapers[i].time_duration,
+                    noOfQuestions: mQuestionPapers[i].total_question,
+                    program: mQuestionPapers[i].program,
+                    course: mQuestionPapers[i].course,
+                }
+                QuestionPaparDetails.push(mQuestionDetails)
+            }
+            res.render('ssListQuestionPaper', {
+                mQuestionPapers: QuestionPaparDetails,
+            });
+        })
+        .catch(error => {
+            console.log(`Error Fetching Class : ${error.message}`);
+            message = "Opps! Something's wrong! Please try again later."
+            res.render('noData', { feedBack: message })
+        });
+}
+

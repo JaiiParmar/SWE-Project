@@ -53,15 +53,18 @@ form{
 </style>
     <div class="app-content" style="padding-top: 40px;">
         <div align="center">
-       <% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
-						</div>
-					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
-						</div>
-					<%}%>
+            <%	if (errorMessage) { %>
+                <div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <%= errorMessage %>
+                  </div>
+
+            <% } else if(okMessage){%>
+                <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <%= okMessage %>
+                                    </div>
+                                <%}%>
         <nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
             <button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
         </nav>
@@ -83,36 +86,36 @@ form{
                         <input hidden  type="text" value="<%=mQuestion.course %>" name="courseId">
                         <input hidden  type="text" value="<%=mQuestion.class %>" name="classId">
                         <tr>
-                            <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                            <div class="wrap-input1 validate-input"  >
                                 <div class="row-1">
                                 <td><label for="code"><div class="col-sm-8"><h5><b> Question  </b></h6></div></label></td>
                                 <td>
                                     <div class="clearfix"></div>
-                                        <div class="wrap-input1 validate-input" data-validate = "Question text required">
+                                        <div class="wrap-input1 validate-input"  >
                                             <textarea class="input1 texta" rows="6" name="question" placeholder="Question Text"><%= mQuestion.text %></textarea>
                                 </td>
                             </div>
                         </tr>
 
                          <tr>
-                            <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                            <div class="wrap-input1 validate-input"  >
                                 <div class="row-1">
                                 <td><label for="code"><div class="col-sm-8"><h5><b>Notes  </b></h6></div></label></td>
                                 <td>
                                     <div class="clearfix"></div>
-                                        <div class="wrap-input1 validate-input" data-validate = "Question text required">
+                                        <div class="wrap-input1 validate-input"  >
                                             <textarea class="input1 texta" rows="6" name="note" placeholder="Question Text"><%= mQuestion.note %></textarea>
                                 </td>
                             </div>
                         </tr>
 
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Topic </b></h6></div></label></td>
                             <td>
-                                <input disabled class="input1" type="text" value="<%= mQuestion.topic%>" name="topic" placeholder="Course code" required="required">
+                                <input disabled class="input1" type="text" value="<%= mQuestion.topic%>" name="topic" placeholder="Course code" required>
                                 <!-- <select class="input1" name="mtopic">
                                     <option value="<%=mQuestion.topic%>" selected>Select a topic</option>
                                     <% for(let i = 0; mTopics[i]; i++){ %>
@@ -122,12 +125,12 @@ form{
                                 </select> -->
                                  </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Difficulty  </b></h6></div></label></td>
-                            <td><input disabled class="input1" type="text" value="<%= mQuestion.difficulty%>" name="difficulty" placeholder="Course code" required="required">
+                            <td><input disabled class="input1" type="text" value="<%= mQuestion.difficulty%>" name="difficulty" placeholder="Questions" required>
                                 <!-- <select class="input1" name="level">
                                     <option>Select Difficulty level</option>
                                     <option value="easy">Easy</option>
@@ -136,21 +139,21 @@ form{
                                 </select> -->
                             </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Marks </b></h6></div></label></td>
-                            <td><input  class="input1" type="text" value="<%= mQuestion.mark%>" name="marks" placeholder="Course code" required="required">
+                            <td><input  class="input1" type="text" value="<%= mQuestion.mark%>" name="marks" placeholder="Marks" required>
                                  </div>
                         </tr>
-                        <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                        <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Type </b></h6></div></label></td>
                             <td>
-                                <input disabled class="input1" type="text" value="<%= mQuestion.type%>" name="type" placeholder="Course code" required="required">
+                                <input disabled class="input1" type="text" value="<%= mQuestion.type%>" name="type" placeholder="Course code" required>
                                 <!-- <select class="input1" name="type" onchange="showOption(this.value)" id="qType">
                                     <option>Select Question Type</option>
                                     <option value="theory">Theory</option>
@@ -162,7 +165,7 @@ form{
                         </tr>
                         <% if(mQuestion.type !== 'theory'){ %>
                             <% for(let i = 0; mQuestion.options[i]; i++){ %>
-                            <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                            <div class="wrap-input1 validate-input"  >
                                 <div class="row-1">
                             <tr>
                                 <div class="row-1"></div>
@@ -172,15 +175,34 @@ form{
                             </tr>
                             <%}%>
                         <%}%>
-                        <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                        <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Answer </b></h6></div></label></td>
-                            <td><input  class="input1" type="text" value="<%= mQuestion.answer%>" name="answer" placeholder="Course code" required="required">
+                            <td><input  class="input1" type="text" value="<%= mQuestion.answer%>" name="answer" placeholder="Answer">
                                  </div>
                         </tr>
+                        <tr>
+                              <div class="row-1"></div>
+                            <td><label for="code"><div class="col-sm-8"><h5><b> Public/Private </b></h6></div></label></td>
+                            <td>
+                                <% if(!mQuestion.public) {%>
+                                <select class="input1" name="public" >
+                                        <option value="private" selected>Private</option>
+                                        <option value="public">Make Public</option>
+                                </select>
+                                <% } else {%>
+                                <select class="input1" name="public" >
+                                    <option value="public" selected>Public</option>
+                                    <option value="private">Meke Private</option>
+                                </select>
+                                <%}%>
+                            </td>
+                            </div>
+                        </tr>
                     </table>
+
                     <hr>
                     <div class="container-contact1-form-btn">
                         <button type="submit" class="contact1-form-btn" >

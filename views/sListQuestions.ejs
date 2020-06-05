@@ -1,5 +1,5 @@
 
-<%- include('partials/headerFaculty.ejs') %>
+<%- include('partials/headerStudent.ejs') %>
 
 <style>
 	.multiselect {
@@ -74,33 +74,48 @@
 </style>
 
 <div align="center">
-<form class="contact1-form validate-form" action="/generateQuestionPaper/<%=mClass.classId%>" method="POST">
+<form class="contact1-form validate-form" action="/findPublicQuestions" method="POST">
 				<span class="contact1-form-title">
-					Generate Question Paper
+					Find Questions
 				</span>
           <hr>
           <span class="contact1-form-title">
 					Select Constrains for the Questions
-				</span>
+          </span>
+ <div class=" wrap-input1 validate-input"  >
+    <select class="input1" name="faculty" required>
+        <option value="">Select Faculty</option>
+         <% for(var i=0; i < faculties.length; i++) {  %>
+             <option value="<%=faculties[i]._id%>"><%=faculties[i].name%></option>
+         <% } %>
+        </select>
+    </div>
+    <span class="shadow-input1"></span>
 
-	<div class=" wrap-input1 validate-input"  >
-	<div id="checkboxes">
-	<a href="#content" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
-		<label class="" data-toggle="collapse">Select Topics<div class="arrow"></div></label></a>
-			<ul id="content" class="collapse" data-parent="#sidebar-nav">
-				<% for(let i = 0; mClass.topics[i]; i++) {%>
-					<li><label  for="one">
-          <input type="checkbox" name="mTopics" value="<%= mClass.topics[i]%>" id="one"/><%= mClass.topics[i]%></label></li>
-          <input type="hidden" value="<%= mClass.topics[i]%>" name="allTopics">
-				<%}%>
-			</ul>
-				<span class="shadow-input1"></span>
-  </div>
+    <div class=" wrap-input1 validate-input"  >
+    <select class="input1" name="program" required>
+        <option value="">Select Program</option>
+         <% for(var i=0; i < programs.length; i++) {  %>
+             <option value="<%=programs[i]._id%>"><%=programs[i]._id%></option>
+         <% } %>
+        </select>
+    </div>
+    <span class="shadow-input1"></span>
+
+     <div class=" wrap-input1 validate-input"  >
+    <select class="input1" name="course" required>
+        <option>Select Course</option>
+         <% for(var i=0; i < courses.length; i++) {  %>
+             <option value="<%=courses[i]._id%>"><%= courses[i]._id%></option>
+         <% } %>
+        </select>
+    </div>
+    <span class="shadow-input1"></span>
 
   <div class=" wrap-input1 validate-input"  >
 	<div id="checkboxes">
 	<a href="#types" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
-		<label class="" data-toggle="collapse">Select types oF Qustions <div class="arrow"></div></label></a>
+		<label class="" data-toggle="collapse">Select types of Qustion <div class="arrow"></div></label></a>
 			<ul id="types" class="collapse" data-parent="#sidebar-nav">
 					<li><label  for="one">
 					<input type="checkbox" name="mTypes" value="theory" id="one"/>Theory</label></li>
@@ -113,27 +128,26 @@
 
 			</ul>
 				<span class="shadow-input1"></span>
+    </div>
+
+    <div class=" wrap-input1 validate-input"  >
+	<div id="checkboxes">
+	<a href="#diff" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
+		<label class="" data-toggle="collapse">Select Difficutly Level<div class="arrow"></div></label></a>
+			<ul id="diff" class="collapse" data-parent="#sidebar-nav">
+					<li><label  for="one">
+					<input type="checkbox" name="mDiff" value="easy" id="one"/>Easy</label></li>
+          <li><label  for="one">
+					<input type="checkbox" name="mDiff" value="medium" id="one"/>Medium</label></li>
+          <li><label  for="one">
+					<input type="checkbox" name="mDiff" value="hard" id="one"/>Hard</label></li>
+          	</ul>
+				<span class="shadow-input1"></span>
 	</div>
-
-				<div class="wrap-input1 validate-input"  >
-					<input class="input1" type="number" name="nEasy" value=1 placeholder="Number of Easy questions">
-					<span class="shadow-input1"></span>
-				</div>
-
-				<div class="wrap-input1 validate-input"  >
-					<input class="input1" type="number" value=1 name="nMedium" placeholder="Number of Medium questions">
-					<span class="shadow-input1"></span>
-				</div>
-
-
-				<div class="wrap-input1 validate-input"  >
-					<input class="input1" type="number" value=1 name="nHard" placeholder="Number of Difficult questions">
-					<span class="shadow-input1"></span>
-				</div>
 				<div class="container-contact1-form-btn">
 					<button typ="submit" class="contact1-form-btn">
 						<span>
-							GENERATE
+							FIND
 							<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 						</span>
 					</button>

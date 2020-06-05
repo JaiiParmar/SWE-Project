@@ -1,5 +1,10 @@
-<%- include('partials/headerFaculty.ejs') %>
+<% if(user.role === "faculty"){%>
+    <%- include('partials/headerFaculty.ejs') %>
+<%}%>
 
+<% if(user.role === "student"){%>
+<%- include('partials/headerStudent.ejs') %>
+<%}%>
 <style type="text/css">
 body {
         color: #404E67;
@@ -270,22 +275,22 @@ body {
                     <input hidden  type="text" value="<%=mCacheId%>" name="cacheId">
 
                     <div class="wrap-input1 validate-input">
-					<div class="sideleft validate-input" data-validate = "Exam Date require">
+					<div class="sideleft validate-input" >
 					    <input class="input1" type="text" id="examDate" required name="examDate" placeholder="Exam Date- Format: dd-mm-yy" oninput="getDate()">
 					    <span class="shadow-input1"></span>
 				    </div>
-                        <div class="sideright validate-input" data-validate = "Time Duration required">
+                        <div class="sideright validate-input" >
                             <input class="input1" type="number" id="timeDuration" required name="timeDuration" placeholder="Time Duration - in Minutes" oninput="getTime()">
                             <span class="shadow-input1"></span>
 				        </div>
                 </div>
                  <div class="wrap-input1 validate-input">
-					 <div class="validate-input" data-validate = "Exam Name required">
+					 <div class="validate-input" >
                             <input class="input1" required type="text" id="examName" name="examName" placeholder="ExamName: Ex: Winter-2020" oninput="getExam()">
                         </div>
 			    </div>
                 <div class="clearfix"></div>
-                 <div class="wrap-input1 validate-input" required data-validate = "Instructions required" >
+                 <div class="wrap-input1 validate-input" required >
 					<textarea class="input1 texta" rows="4" name="instructions" id="instructions" placeholder="Instructions" oninput="getIns()"></textarea>
 						<span class="shadow-input1"></span>
 			    </div>
@@ -379,7 +384,36 @@ body {
             <span class="contact1-form-title">
                 Question Paper
             </span>
+<div class="container">
+     <%	if (errorMessage) { %>
+            <div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <%= errorMessage %>
+              </div>
 
+        <% } else if(okMessage){%>
+            <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <%= okMessage %>
+                                </div>
+                            <%}%>
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>
+                       </h2></div>
+                    <div class="col-sm-4">
+                        <%if(user.role === 'faculty'){%>
+                            <%if(!QuestionPaper.public) {%>
+                                <a href="/changeAccess/<%=QuestionPaper._id%>"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>MakePublic</button></a>
+                            <%} else {%>
+                                <a href="/changeAccess/<%=QuestionPaper._id%>"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>MakePrivate</button></a>
+                            <%}%>
+                              <a href="/deleteQuestionPaper/<%=QuestionPaper.class%>/<%=QuestionPaper._id%>"><button type="button" class="btn btn-danger add-new"><i class="fa fa-minus"></i>Delete</button></a>
+                        <%}%>
+                    </div>
+                </div>
+            </div>
         <div id="exportContent">
             <div class="paper-container" >
             <div  style="margin-top: 20px;">

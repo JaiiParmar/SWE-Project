@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
-/**Mail Service */
-const nodemailer = require('nodemailer');
+
 
 const User = require('../models/user');
 const Faculty = require('../models/faculty');
@@ -12,11 +11,13 @@ const Question = require("../models/question");
 exports.addUser = (req, res, next) => {
     //const confirmPassword = req.body.confirmPassword;
     const id = req.body.email
-    const password = req.body.pass
+    const password = req.body.password
     const name = req.body.name
     const role = req.body.role
     const program = req.params.pid
+    const batch = req.body.batch
 
+    console.log(id, password, name, role, program);
 
     User.findOne({ _id: id })
         .then((userDoc) => {
@@ -53,7 +54,7 @@ exports.addUser = (req, res, next) => {
                     }
                     else if (role === 'student') {
                         //add reference to facutly
-                        Student({ _id: id, program:program})
+                        Student({ _id: id, program:program, batch:batch})
                             .save().catch((err) => {
                                 console.log(err);
                                 req.flash(
@@ -89,6 +90,7 @@ exports.addUser = (req, res, next) => {
                     //         console.log('email sent to : ' + id);
                     //     }
                     // });
+
                     if (role === 'faculty') {
                         req.flash(
                             "info",
@@ -111,7 +113,7 @@ exports.addUser = (req, res, next) => {
             if (role === 'faculty') {
                 req.flash(
                     "error",
-                    "Couldn't add Facutly! Please try again!"
+                    "Couldn't add User! Please try again!"
                 );
                 res.redirect("/getAddFaculty");
             }
@@ -238,4 +240,150 @@ exports.deleteFaculty = (req, res, next) => {
 
 }
 
+exports.getStudentsDetails = (req, res, next) => {
 
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+    const pid = req.params.pid;
+    const sid = req.params.sid;
+
+    console.log(pid, sid);
+
+
+    User.findOne({ _id: sid })
+        .then((user) => {
+            if (!user) {
+                req.flash("error", "Coundn't open the students");
+                return res.redirect('/listStudent/' + pid)
+            }
+            Student.findOne({ _id:sid })
+                .then((suser) => {
+                    if (!suser) {
+                        req.flash("error", "Coundn't open the students");
+                        return res.redirect('/listStudent/' + pid)
+                    }
+
+                    //add if condition if Student of Facutly then based on the condition redirect.
+                    res.render('StudentDetails', {
+                        student: user,
+                        program: pid,
+                        batch:suser.batch,
+                        errorMessage: mError,
+                        okMessage: mOk
+                    })
+                })
+                .catch((err) => {
+                    console.log(err);
+                    req.flash(
+                        "error",
+                        "Couldn't find the student! Please try again later!"
+                    );
+                    //add if condition if Student of Facutly then based on the condition redirect.
+                    res.redirect("/listStudent/" + pid);
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+            req.flash(
+                "error",
+                "Couldn't find the student! Please try again later!"
+            );
+            //add if condition if Student of Facutly then based on the condition redirect.
+            res.redirect("/listStudent/"+ pid);
+        });
+}
+
+
+exports.updateStudent = (req, res, next) => {
+
+    const sid = req.params.sid
+    const pid = req.params.pid
+    const name = req.body.sname
+    const active = req.body.sactive
+    const batch = req.body.sbatch
+
+    User.findByIdAndUpdate(sid, {
+        $set: {
+            name: name,
+            active: active
+        }
+    })
+        .then(result => {
+            //add if condition if Student of Facutly then based on the condition redirect.
+            Student.findByIdAndUpdate(sid, {
+                $set: {
+                    batch : batch,
+                }
+            })
+                .then(ress => {
+                    req.flash(
+                        "info",
+                        "Student Updated!"
+                    );
+                    return res.redirect('/listStudent/' + pid)
+                })
+                .catch(error => {
+                    console.log(`Error updating Student: ${error.message}`);
+                    req.flash(
+                        "error",
+                        "Couldn't update the Student! Please try again later!"
+                    );
+                    res.redirect("/getShowStudent/" + pid +"/"+ sid);
+                })
+        })
+        .catch(error => {
+            console.log(`Error updating Student: ${error.message}`);
+            req.flash(
+                "error",
+                "Couldn't update student! Please try again later!"
+            );
+            res.redirect("/getShowFaculty/" + pid + "/" + sid);
+        });
+}
+
+
+
+//Delete Faculty
+exports.deleteStudent = (req, res, next) => {
+    const sid = req.params.sid;
+    const pid = req.params.pid
+
+    Student.findByIdAndDelete(sid)
+        .then(ress => {
+            //add if condition if Student of Faculty then based on the condition redirect.
+            User.findByIdAndDelete(sid)
+                .then(resss => {
+                    req.flash(
+                        "info",
+                        "Student Deleted!"
+                    );
+                    res.redirect('/listStudent/' + pid);
+                })
+                .catch(err => {
+                    console.log(err.message);
+                    req.flash(
+                        "error",
+                        "Couldn't delete the student! Please try again later!"
+                    );
+                    res.redirect("/getShowFaculty/" + pid + "/" + sid);
+                })
+        }).catch(err => {
+            console.log(err.message);
+            req.flash(
+                "error",
+                "Couldn't delete the student! Please try again later!"
+            );
+            res.redirect("/getShowFaculty/" + pid + "/" + sid);
+        })
+}

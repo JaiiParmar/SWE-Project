@@ -13,10 +13,9 @@ const studentSchema = new Schema({
         ref:'program'
     },
     batch:{
-        type:Date,
+        type:String,
     },
 });
 
 //Export model
-
 module.exports = mongoose.model("student", studentSchema);

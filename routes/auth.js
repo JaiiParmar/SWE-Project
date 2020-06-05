@@ -5,15 +5,18 @@ const express = require("express");
 const authController = require("../controllers/auth-controller");
 
 const router = express.Router();
+const validator = require("../controllers/validator");
 
 //get the login page.
 router.get("/", authController.getLogin);
 
 //login
-router.post("/", authController.postLogin);
+router.post("/",validator.createValidationFor('/'),validator.checkValidationLogin, authController.postLogin);
 
 //logout
 router.get("/logout", authController.postLogout);
+
+
 
 router.get('/getForgotPassword', authController.getForgotPassword)
 

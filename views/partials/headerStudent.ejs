@@ -1,34 +1,37 @@
-<meta charset="utf-8">
 
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 <!--===============================================================================================-->
-<link rel="icon" type="image/png" href="ContactFrom_v1/images/icons/favicon.ico" />
+	<link rel="icon" type="image/png" href="/images/da1.png" />
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="ContactFrom_v1/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/ContactFrom_v1/vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="ContactFrom_v1/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/ContactFrom_v1/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="ContactFrom_v1/vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="/ContactFrom_v1/vendor/animate/animate.css">
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="ContactFrom_v1/vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="/ContactFrom_v1/vendor/css-hamburgers/hamburgers.min.css">
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="ContactFrom_v1/vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="/ContactFrom_v1/vendor/select2/select2.min.css">
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="ContactFrom_v1/css/util.css">
-<link rel="stylesheet" type="text/css" href="ContactFrom_v1/css/main.css">
+	<link rel="stylesheet" type="text/css" href="/ContactFrom_v1/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/ContactFrom_v1/css/main.css">
 <!--===============================================================================================-->
-
-
 <meta name="author" content="Marx JMoura">
 <meta name="description" content="Create simple forms using basic elements.">
-<title><%= user.role %> - Dashboard</title>
-<link rel="icon" href="images/favicon.ico">
+<title><%= user.role %></title>
+<link rel="icon" href="/images/da1.png">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css"
-    rel="stylesheet">
-<link href="stylesheets/admin4b.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+<link href="/stylesheets/admin4b.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-</head>
+
 <body
     <div class="app">
         <div class="app-body">
@@ -38,39 +41,25 @@
                         <span class="x"></span></button></div>
 
                 <div class="sidebar-header">
-                    <img src="images/da1.png" class="user-photo">
+                    <img src="/images/da1.png" class="user-photo">
                     <p class="username"><%= user.name %><br><small><%= user.email%></small></p>
                 </div>
 
                 <ul id="sidebar-nav" class="sidebar-nav">
-                    <li class="sidebar-nav-btn"><a href="\"
+                    <li class="sidebar-nav-btn"><a href="#"
                             class="btn btn-block btn-outline-light"><%= user.role %></a></li>
                     <li class="sidebar-nav-group"><a href="#content" class="sidebar-nav-link" data-toggle="collapse"><i
                                 class="icon-doc"></i>list Questions</a>
                         <ul id="content" class="collapse" data-parent="#sidebar-nav">
-                            <li><a href="addquestion_faculty" class="sidebar-nav-link"></a></li>
-                            <li><a href="removequestion_faculty" class="sidebar-nav-link">Remove Questions</a></li>
+							<li><a href="/sGetPublicQuestions" class="sidebar-nav-link">List Questions</a></li>
                     </li>
                 </ul>
                 </li>
-                <li class="sidebar-nav-group"><a href="#forms" class="sidebar-nav-link" data-toggle="collapse"><i
-                            class="icon-pencil"></i>Question Paper</a>
+                <li class="sidebar-nav-group"><a href="#forms" class="sidebar-nav-link"data-toggle="collapse"><i
+                            class="icon-doc"></i>Question Paper</a>
                     <ul id="forms" class="collapse" data-parent="#sidebar-nav">
-                        <li><a href="generate_questionpaper_faculty" class="sidebar-nav-link">Generate Paper</a></li>
-                        <li><a href="review_questionpaper_faculty" class="sidebar-nav-link">Review Paper</a></li>
+                        <li><a href="/getPublicQuestionPapers" class="sidebar-nav-link">Question Paper</a></li>
                     </ul>
-                </li>
-
-                <li class="sidebar-nav-group"><a href="#input-controls" class="sidebar-nav-link"
-                        data-toggle="collapse"><i class="icon-note"></i>Old Question Paper</a>
-                    <ul id="input-controls" class="collapse" data-parent="#sidebar-nav">
-                        <li><a href="old_questionpapers" class="sidebar-nav-link">View Old Paper</a></li>
-
-                    </ul>
-                </li>
-
-                <li class="sidebar-nav-group"><a href="#device-controls" class="sidebar-nav-link"
-                        data-toggle="collapse"><i class="icon-note"></i>Results</a>
                 </li>
 
                 <div class="sidebar-footer">
@@ -82,7 +71,7 @@
 	<nav class="navbar navbar-expand navbar-light bg-white">
 	<button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
 
-	<ul class="navbar-nav ml-auto">
+	<ul class="navbar-nav ml-auto" hidden	>
 	<li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="badge badge-pill badge-primary">3</span> <i class="icon-bell"></i></a><div class="dropdown-menu dropdown-menu-right"><a href="./pages/content/notification.html" class="dropdown-item"><small class="dropdown-item-title">Lorem ipsum (today)</small><br><div>Lorem ipsum dolor sit amet...</div></a>
 
 	<div class="dropdown-divider"></div>
@@ -97,6 +86,8 @@
 		<nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
 			<button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
 		</nav><nav aria-label="breadcrumb"></nav>
+
+
 
 
 

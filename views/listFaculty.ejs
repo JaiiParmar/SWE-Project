@@ -88,22 +88,25 @@
     <div class="app-content" style="padding-top: 40px;"><nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white"><button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button></nav><nav aria-label="breadcrumb"></nav>
 <div class="container">
      <div align="center">
-                   <% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
-						</div>
-					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
-						</div>
-					<%}%>
+        <%	if (errorMessage) { %>
+            <div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <%= errorMessage %>
+              </div>
+
+        <% } else if(okMessage){%>
+            <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <%= okMessage %>
+                                </div>
+                            <%}%>
 </div>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-8"><h2>Faculty <b>Details</b></h2></div>
                     <div class="col-sm-4">
-                        <a href="getAddFaculty"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button></a>
+                        <a href="/getAddFaculty"><button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button></a>
                     </div>
                 </div>
             </div>
@@ -126,7 +129,7 @@
                         <td><%= faculties[i].name %></td>
                         <td><%= faculties[i]._id %></td>
                         <td>
-                            <a href="getShowFaculty/<%= faculties[i]._id %>" class='edit' title='Edit' data-toggle='tooltip'><i class='material-icons'>&#xE254;</i></a>
+                            <a href="/getShowFaculty/<%= faculties[i]._id %>" class='edit' title='Edit' data-toggle='tooltip'><i class='material-icons'>&#xE254;</i></a>
 
                         </td>
                     </tr>

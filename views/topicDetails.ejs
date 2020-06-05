@@ -23,15 +23,18 @@
 </style>
     <div class="app-content" style="padding-top: 40px;">
         <div align="center">
-       <% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
-						</div>
-					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
-						</div>
-					<%}%>
+            <%	if (errorMessage) { %>
+                <div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <%= errorMessage %>
+                  </div>
+
+            <% } else if(okMessage){%>
+                <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <%= okMessage %>
+                                    </div>
+                                <%}%>
         <nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
             <button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
         </nav>
@@ -49,17 +52,17 @@
                     </div>
                     <form action="/updateTopic/<%=mTopic.classId %>/<%=mTopic.topic%>" method="post">
                     <table>
-                        <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                        <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b> ProgramCode  </b></h6></div></label></td>
-                            <td><input disabled class="input1" type="text" value="<%= mTopic.program%>" name="pid" placeholder="Course code" required="required>
+                            <td><input disabled class="input1" type="text" value="<%= mTopic.program%>" name="pid" placeholder="Course code" required>
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
 
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
@@ -71,7 +74,7 @@
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Topic </b></h6></div></label></td>
-                            <td><input  class="input1" type="text" value="<%= mTopic.topic%>" name="tname" placeholder="Course code" required="required">
+                            <td><input  class="input1" type="text" value="<%= mTopic.topic%>" name="tname" placeholder="Topic Name" required>
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>

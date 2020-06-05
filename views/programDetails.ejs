@@ -18,23 +18,28 @@
         margin: 50px 10px;
     }
 </style>
-    <div class="app-content" style="padding-top: 40px;">
-       <% if(errorMessage) {%>
-						<div  style="border: 1px solid red; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; margin-top:-12px; font-weight: bold; color:red; padding:auto; "><%= errorMessage %> </h5>
-						</div>
-					<% } else if(okMessage){%>
-						<div  style="border: 1px solid #2e8cc2; padding: 30px; width: 50%; height: 60px; margin-bottom: 30px;" >
-							<h5 style="font-size: 20px; font-weight: bold; margin-top:-12px; color:#2e8cc2; padding:auto; "><%= okMessage %> </h5>
-						</div>
-					<%}%>
 
+
+                            <div class="app-content" style="padding-top: 40px;">
         <nav style="position: fixed;background-color: transparent;" class="navbar navbar-expand navbar-light bg-white">
             <button type="button" class="btn btn-sidebar" data-toggle="sidebar"><i class="icon-menu"></i></button>
         </nav>
         <nav aria-label="breadcrumb">
         </nav>
         <div class="container">
+            <%	if (errorMessage) { %>
+                <div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <%= errorMessage %>
+                  </div>
+
+            <% } else if(okMessage){%>
+                <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <%= okMessage %>
+                                    </div>
+                                <%}%>
+
             <div class="table-wrapper">
                 <div class="table-title">
                     <div class="row">
@@ -43,49 +48,49 @@
                     </div>
                     <form action="updateProgram/<%= program._id%>" method="post">
                     <table>
-                        <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                        <div class="wrap-input1 validate-input"  =  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Code  </b></h6></div></label></td>
-                            <td><input disabled class="input1" type="text" value="<%= program._id%>" name="pcode" placeholder="Course code" required="required>
+                            <td><input disabled class="input1" type="text" value="<%= program._id%>" name="pcode" placeholder="Course code" required="required">
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
 
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  =  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Name  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" value="<%= program.name%>" name="pname" placeholder="Course code" required="required>
+                            <td><input class="input1" type="text" required value="<%= program.name%>" name="pname" placeholder="Course code" >
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input">
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Duration(inYears)  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" value="<%= program.duration%>" name="pduration" placeholder="Course code" required="required>
+                            <td><input class="input1" type="text"  required value="<%= program.duration%>" name="pduration" placeholder="Course code" >
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input" >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Active  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" value="<%= program.active%>"name="pactive" placeholder="Course code" required="required>
+                            <td><input class="input1" type="text" value="<%= program.active%>"name="pactive" required placeholder="Course code" >
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
-                         <div class="wrap-input1 validate-input" data-validate = "Course code is required">
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>CreatedAt  </b></h6></div></label></td>
-                            <td><input disabled class="input1" type="text" value="<%= program.created_at%>" name="" placeholder="Course code" required="required>
+                            <td><input disabled class="input1" type="text" value="<%= program.created_at%>" name="" placeholder="Course code" required="required">
                                 <span class="shadow-input1"></span></td>
                             </div>
                         </tr>
@@ -100,6 +105,12 @@
                          <a class="contact1-form-btn" href="/getAddStudent/<%= program._id%>">
 							<span>
 								AddStudents
+								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+							</span>
+                        </a>
+                          <a class="contact1-form-btn" href="/listStudent/<%= program._id%>">
+							<span>
+								ListStudents
 								<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 							</span>
                         </a>

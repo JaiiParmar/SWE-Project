@@ -5,6 +5,7 @@ const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const User = require('./models/user');
+const Faculty = require("./models/faculty")
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
@@ -35,6 +36,7 @@ app.use(express.static(__dirname + '/public'));
 const authRoutes = require("./routes/auth");
 const adminRoutes = require('./routes/admin');
 const facultyRoutes = require('./routes/faculty');
+const studentRoutes = require('./routes/student')
 const errorController = require('./controllers/error')
 
 //body-parser
@@ -68,14 +70,25 @@ app.use((req, res, next) => {
         email : user._id,
         name : user.name
       }
-     //console.log(res.locals.user);
-      next();
+      if (user.role === 'faculty') {
+        Faculty.findById(user._id)
+          .then(fac => {
+            if(!fac)
+              res.locals.classes = []
+            else
+              res.locals.classes = fac.classes
+            next();
+          }).catch(err => {console.log( "Error:", err);
+          })
+      } else {
+        next();
+      }
     })
     .catch((err) => console.log(err));
 });
 
 app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;  //to use with every request.
+  res.locals.isAuthenticated = req.session.isLoggedIn;
   //res.locals.csrfToken = req.csrfToken();
   next();
 });
@@ -83,6 +96,7 @@ app.use((req, res, next) => {
 app.use('/', adminRoutes);
 app.use('/', authRoutes);
 app.use('/', facultyRoutes);
+app.use('/', studentRoutes);
 
 //if no routes found.
 app.use(errorController.get404);

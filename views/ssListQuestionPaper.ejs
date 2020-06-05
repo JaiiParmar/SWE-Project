@@ -1,4 +1,4 @@
-<%- include('partials/headerFaculty.ejs') %>
+<%- include('partials/headerStudent.ejs') %>
 <style type="text/css">
     body {
         color: #404E67;
@@ -116,30 +116,10 @@
 </nav><nav aria-label="breadcrumb"></nav>
 
 <div class="container">
-    <div align="center">
-      <% if (errorMessage) { %>
-            <div class="alert alert-danger alert-dismissible" style="width: 50%;text-align: center;">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <%= errorMessage %>
-              </div>
-
-        <% } else if(okMessage){%>
-            <div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <%= okMessage %>
-                                </div>
-                            <%}%>
-                            </div>
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>
-                        <% if(typeof mQuestionPapers != 'undefined') { %>
-                            <% if(typeof mQuestionPapers != null ) { %>
-                                <%= mQuestionPapers[0].program %><b> <%= mQuestionPapers[0].course %> </b> || Questions-Papers
-                                <% } %>
-                                <% } %>
-                            </h2></div>
+                    <div class="col-sm-8"><h2><%=mQuestionPapers[0].program%><b> <%=mQuestionPapers[0].course%> </b> || Questions-Papers</h2></div>
                 </div>
             </div>
                 <table class="table table-bordered" id="course">
@@ -151,8 +131,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% if(typeof mQuestionPapers != 'undefined') { %>
-                            <% if(typeof mQuestionPapers != null ) { %>
                          <% for(var i=0; i < mQuestionPapers.length; i++) {  %>
                             <tr>
                             <td><%= i+1 %></td>
@@ -161,30 +139,22 @@
                                     <div class="question">
                                         <h3><%= mQuestionPapers[i].examName %></h3>
                                     </div>
-
                                     <div class="question-opt">
                                         <ul class="opts">
                                             <li><%= mQuestionPapers[i].examDate%></li>
                                             <li><%= mQuestionPapers[i].difficulty %></li>
                                             <li><%= mQuestionPapers[i].totalMarks %></li>
                                             <li><%= mQuestionPapers[i].noOfQuestions %></li>
-                                            <% if(mQuestionPapers[i].public){ %>
-                                            <li>public</li>
-                                            <%} else {%>
-                                            <li>Private</li>
-                                            <%}%>
                                         </ul>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <a href="/viewQuestionPaper/<%=mQuestionPapers[i].qpid%>" class='edit' title='View Paper' data-toggle='tooltip'>
+                                <a href="/viewQuestionPaper/<%=mQuestionPapers[i].qpid%>" class='edit' title='View' data-toggle='tooltip'>
                                     <i class='material-icons'>&#xE261;</i>
                                 </a>
                             </td>
                         </tr>
-                         <% } %>
-                         <% } %>
                          <% } %>
                          </tbody>
                 </table>
