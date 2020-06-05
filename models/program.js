@@ -21,13 +21,6 @@ const programSchema = new Schema({
     max: 5,
     defualt: 1,
   },
-  courses: [
-    {
-      type:String,
-      ref: "course",
-      unique: true,
-    },
-  ],
   active: {
     type: Boolean,
     default: true,

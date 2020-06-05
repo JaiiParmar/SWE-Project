@@ -14,6 +14,7 @@ const courseSchema = new Schema({
     type: String,
     maxlength: 50,
     required: true,
+    unique:true
   },
   optional: {
     type: Boolean,
