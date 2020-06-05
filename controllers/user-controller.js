@@ -17,8 +17,6 @@ exports.addUser = (req, res, next) => {
     const program = req.params.pid
     const batch = req.body.batch
 
-    console.log(id, password, name, role, program);
-
     User.findOne({ _id: id })
         .then((userDoc) => {
             if (userDoc) {

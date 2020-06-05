@@ -19,7 +19,9 @@ const port = "27017";
 const db = "paper_generator"; // database name
 //set url
 
-const MONGODB_URI = `mongodb://${host}:${port}/${db}`;
+//const MONGODB_URI = `mongodb://${host}:${port}/${db}`;
+
+const MONGODB_URI = "imongodb+srv://jaiiparmar:admin7600@cluster0-gn50g.mongodb.net/paper_generator?retryWrites=true&w=majority";
 
 const app = express();
 //const csrfProtection = csrf();
@@ -51,7 +53,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: store,
-   // cookie: { maxAge: new Date(Date.now() + (3600 * 1000)) } //for an hour
+    cookie: { maxAge: new Date(Date.now() + (3600 * 1000)) } //for an hour
   })
 );
 
