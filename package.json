@@ -16,14 +16,13 @@
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^2.0.3",
     "csurf": "^1.9.0",
+    "dotenv": "^8.2.0",
     "ejs": "^3.0.2",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.17.1",
     "express-validator": "^6.5.0",
-    "js-alert": "^1.0.4",
     "mongoose": "^5.9.7",
-    "nodemailer": "^6.4.6",
     "session": "^0.1.0"
   },
   "devDependencies": {
