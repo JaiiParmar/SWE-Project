@@ -43,7 +43,7 @@ app.use(bodyparser.urlencoded({
 
 app.use(
   session({
-    secret: "my secret",
+    secret: config.SECRET,
     resave: false,
     saveUninitialized: false,
     store: store,
