@@ -1,4 +1,3 @@
-const path = require("path");
 
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
@@ -9,20 +8,21 @@ const Faculty = require("./models/faculty")
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
-//const errorController = require('./controllers/error');
+
+const authRoutes = require("./routes/auth");
+const adminRoutes = require('./routes/admin');
+const facultyRoutes = require('./routes/faculty');
+const studentRoutes = require('./routes/student')
+const errorController = require('./controllers/error')
+
+let env = process.env.NODE_ENV || 'development';
+let config = require('./config')[env];
+
 
 //const csrf = require("csurf");
 const flash = require("connect-flash");
-
-const host = "localhost";
-const port = "27017";
-const db = "paper_generator"; // database name
 //set url
-
-//const MONGODB_URI = `mongodb://${host}:${port}/${db}`;
-
-const MONGODB_URI = "imongodb+srv://jaiiparmar:admin7600@cluster0-gn50g.mongodb.net/paper_generator?retryWrites=true&w=majority";
-
+const MONGODB_URI = config.DBLINK;
 const app = express();
 //const csrfProtection = csrf();
 const store = new MongoDBStore({
@@ -35,17 +35,11 @@ app.use(expressLayouts);
 app.set('view engine' , 'ejs');
 app.use(express.static(__dirname + '/public'));
 
-const authRoutes = require("./routes/auth");
-const adminRoutes = require('./routes/admin');
-const facultyRoutes = require('./routes/faculty');
-const studentRoutes = require('./routes/student')
-const errorController = require('./controllers/error')
-
 //body-parser
+app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
   extended: true
 }));
-app.use(bodyparser.json());
 
 app.use(
   session({
@@ -53,7 +47,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: store,
-    cookie: { maxAge: new Date(Date.now() + (3600 * 1000)) } //for an hour
+    //cookie: { maxAge: 3600 * 1000 } //for an hour
   })
 );
 
