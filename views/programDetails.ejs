@@ -53,17 +53,17 @@
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Code  </b></h6></div></label></td>
-                            <td><input disabled class="input1" type="text" value="<%= program._id%>" name="pcode" placeholder="Course code" required="required">
+                            <td><input disabled class="input1" type="text" value="<%= program._id%>" name="code" placeholder="Course code" required="required">
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
 
-                         <div class="wrap-input1 validate-input"  =  >
+                         <div class="wrap-input1 validate-input"  >
                             <div class="row-1">
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Name  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" required value="<%= program.name%>" name="pname" placeholder="Course code" >
+                            <td><input class="input1" type="text" required value="<%= program.name%>" name="name" placeholder="Program name" >
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
@@ -72,7 +72,7 @@
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Duration(inYears)  </b></h6></div></label></td>
-                            <td><input class="input1" type="text"  required value="<%= program.duration%>" name="pduration" placeholder="Course code" >
+                            <td><input class="input1" type="number" min=1 max=10 required value="<%= program.duration%>" name="duration" placeholder="Program Duration ">
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>
@@ -81,7 +81,7 @@
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Active  </b></h6></div></label></td>
-                            <td><input class="input1" type="text" value="<%= program.active%>"name="pactive" required placeholder="Course code" >
+                            <td><input class="input1" type="text" value="<%= program.active%>"name="active" required placeholder="Program Active Status" >
                                 <span class="shadow-input1"></span></td>
                                  </div>
                         </tr>

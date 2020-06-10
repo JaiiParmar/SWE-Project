@@ -115,14 +115,13 @@ form{
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Topic </b></h6></div></label></td>
                             <td>
-                                <input disabled class="input1" type="text" value="<%= mQuestion.topic%>" name="topic" placeholder="Course code" required>
-                                <!-- <select class="input1" name="mtopic">
-                                    <option value="<%=mQuestion.topic%>" selected>Select a topic</option>
+                                <select class="input1" name="topic">
+                                    <option value="<%=mQuestion.topic%>">Select a topic</option>
                                     <% for(let i = 0; mTopics[i]; i++){ %>
-                                        <option value="<%=mTopics[i]%>">
+                                        <option value="<%=mTopics[i]%>" <% var selected = (mTopics[i]=== mQuestion.topic ) ? "selected" : ""; %> <%= selected %>>
                                             <%=mTopics[i]%></option>
                                     <%}%>
-                                </select> -->
+                                </select>
                                  </div>
                         </tr>
                          <div class="wrap-input1 validate-input"  >
@@ -130,13 +129,14 @@ form{
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Difficulty  </b></h6></div></label></td>
-                            <td><input disabled class="input1" type="text" value="<%= mQuestion.difficulty%>" name="difficulty" placeholder="Questions" required>
-                                <!-- <select class="input1" name="level">
-                                    <option>Select Difficulty level</option>
-                                    <option value="easy">Easy</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="hard">Hard</option>
-                                </select> -->
+                            <td>
+                                <select class="input1" name="difficulty">
+                                    <option value="<%= mQuestion.type%>">Select Difficulty level</option>
+                                    <option value="easy" <% var selected = (mQuestion.difficulty === "easy" ) ? "selected" : ""; %> <%= selected %>>Easy</option>
+                                    <option value="medium" <% var selected = (mQuestion.difficulty === "medium" ) ? "selected" : ""; %> <%= selected %>>Medium</option>
+                                    <option value="hard" <% var selected = (mQuestion.difficulty === "hard" ) ? "selected" : ""; %> <%= selected %>>Hard</option>
+                                </select>
+
                             </div>
                         </tr>
                          <div class="wrap-input1 validate-input"  >
@@ -144,7 +144,7 @@ form{
                         <tr>
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Marks </b></h6></div></label></td>
-                            <td><input  class="input1" type="text" value="<%= mQuestion.mark%>" name="marks" placeholder="Marks" required>
+                            <td><input  class="input1" type="number" min=1 value="<%= mQuestion.mark%>" name="marks" placeholder="Marks" required>
                                  </div>
                         </tr>
                         <div class="wrap-input1 validate-input"  >
@@ -153,17 +153,16 @@ form{
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Type </b></h6></div></label></td>
                             <td>
-                                <input disabled class="input1" type="text" value="<%= mQuestion.type%>" name="type" placeholder="Course code" required>
-                                <!-- <select class="input1" name="type" onchange="showOption(this.value)" id="qType">
-                                    <option>Select Question Type</option>
-                                    <option value="theory">Theory</option>
-                                    <option value="mcq">MCQ</option>
-                                    <option value="true/false">True/False</option>
-                                    <option value="yes/no">Yes/No</option>
-                                </select> -->
+                                <select class="input1" name="type" onchange="showOption(this.value)" id="qType">
+                                    <option value="<%= mQuestion.type%>">Select Question Type</option>
+                                    <option value="theory" <% var selected = (mQuestion.type == "theory" ) ? "selected" : ""; %> <%= selected %>>Theory</option>
+                                    <option value="mcq" <% var selected = (mQuestion.type == "mcq" ) ? "selected" : ""; %> <%= selected %>>MCQ</option>
+                                    <option value="true/false" <% var selected = (mQuestion.type == "true/false" ) ? "selected" : ""; %> <%= selected %>>True/False</option>
+                                    <option value="yes/no" <% var selected = (mQuestion.type == "yes/no" ) ? "selected" : ""; %> <%= selected %>>Yes/No</option>
+                                </select>
                                 </div>
                         </tr>
-                        <% if(mQuestion.type !== 'theory'){ %>
+                        <% if(mQuestion.type === 'mcq'){ %>
                             <% for(let i = 0; mQuestion.options[i]; i++){ %>
                             <div class="wrap-input1 validate-input"  >
                                 <div class="row-1">

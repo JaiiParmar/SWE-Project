@@ -2,6 +2,7 @@
 const Faculty = require("../models/faculty");
 const Course = require('../models/course');
 const Program = require('../models/program');
+const Question = require("../models/question");
 
 
 
@@ -216,8 +217,11 @@ exports.deleteClass = (req, res, next) => {
         }
     })
         .then(ress => {
-            req.flash('error',"Class Deleted!")
-            res.redirect('/listClasses');
+            Question.deleteMany({ class: classId })
+            .then(result => {
+                req.flash('error',"Class Deleted!")
+                res.redirect('/listClasses');
+             })
         })
         .catch(error => {
             console.log(`Error Deleting Class : ${error.message}`);
@@ -436,8 +440,15 @@ exports.updateTopic = (req, res, next) => {
                 }
             )
             .then(result => {
-                req.flash('info', "Topic Updated!")
-                res.redirect('/getTopicDetails/' + classId + "/" + newTopic)
+                Question.updateMany({ class: classId, topic: topic }, {
+                    $set: {
+                        topic: newTopic
+                    }
+                })
+                    .then(result => {
+                    req.flash('info', "Topic Updated!")
+                    res.redirect('/getTopicDetails/' + classId + "/" + newTopic)
+                })
             })
             .catch(error => {
                 console.log(`Error updating topic : ${error.message}`);
@@ -454,7 +465,6 @@ exports.updateTopic = (req, res, next) => {
 
 
 exports.deleteTopic = (req, res, next) => {
-
     const id = req.user._id
     const classId = req.params.cid
     const topic = req.params.tid
@@ -467,9 +477,14 @@ exports.deleteTopic = (req, res, next) => {
         }
     )
         .then(result => {
-            console.log("Topic Deleted  -> " + topic);
-            req.flash('info',"Topic Deleted")
-            res.redirect('/listTopics/' + classId )
+            console.log(topic);
+
+            Question.deleteMany({ class: classId, topic: topic })
+                .then(result => {
+                    console.log("Topic Deleted  -> " + topic);
+                    req.flash('info', "Topic Deleted")
+                    res.redirect('/listTopics/' + classId)
+                })
         })
         .catch(error => {
             console.log(`Error Creating Class : ${error.message}`);

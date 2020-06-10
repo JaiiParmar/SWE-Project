@@ -10,32 +10,47 @@ exports.getGenerateQuestionPaper = (req, res, next) => {
     const id = req.user._id;
     const classId = req.params.classId;
 
+    let mError = req.flash("error");
+    let mOk = req.flash("info");
+
+    if (mError.length > 0) {
+        mError = mError[0];
+        mOk = null
+    } else if (mOk.length > 0) {
+        mOk = mOk[0];
+        mError = null
+    }
+    else {
+        mError = mOk = null
+    }
+
     Faculty.findById(id)
         .then(mClass => {
             if (!mClass) {
                 console.log(mClass);
-                message = 'No Classes'
+                message = "Opps! Something's wrong! Please try again later.";
+                res.render("noData", { feedBack: message });
             }
-
             let mmClass = null;
             for (let i = 0; mClass.classes[i]; i++) {
                 if (String(mClass.classes[i]._id) === classId)
                     mmClass = mClass.classes[i];
             }
-
-            res.render('generateQuestionPaper', {
-                mClass: {
-                    classId: classId,
-                    program: mmClass.program,
-                    course: mmClass.course,
-                    topics: mmClass.topics,
-                }
+            res.render("generateQuestionPaper", {
+              mClass: {
+                classId: classId,
+                program: mmClass.program,
+                course: mmClass.course,
+                topics: mmClass.topics,
+              },
+              errorMessage: mError,
+              okMessage: mOk,
             });
         })
         .catch(error => {
-            console.log(`Error Fetching Class : ${error.message}`);
+            console.log(`Error GetGeneratePaper : ${error.message}`);
             message = "Opps! Something's wrong! Please try again later."
-            res.render('noData', { message: message })
+            res.render('noData', { feedBack: message })
         });
 
 }
@@ -67,8 +82,18 @@ exports.generateQuestionPaper = (req, res, next) => {
 
     const totalQuestion = parseInt(nEasy) + parseInt(nMedium) + parseInt(nHard);
 
-    Question.find({ class: classId, topic:{$in:topics}, type: {$in:types}})
+    if (totalQuestion <= 0) {
+        console.log("0 number of Questions");
+        req.flash(
+            "error",
+            "Total number of Questions must be > 0"
+        );
+        return res.redirect("/getGenerateQuestionpaper/" + classId);
+    }
+
+    Question.find({ class: classId, topic: { $in: topics }, type: { $in: types } })
         .then(mQuestions => {
+
             if (!mQuestions) {
                 console.log(mQuestions);
                 message = 'No Questions'
@@ -84,7 +109,6 @@ exports.generateQuestionPaper = (req, res, next) => {
                 }
                 randomizedQuestions[i] = mQuestions[randomIndex];
             }
-
             //An array to store final question that meets with the requirements...
 
             const finalQuestions = [mQuestions[0]]
@@ -114,9 +138,9 @@ exports.generateQuestionPaper = (req, res, next) => {
             if (finalQuestions.length < totalQuestion) {
                 message = "Sorry! Not enough Questions for the speacified 'Constraints'!"
                 console.log(message);
-                res.render('noData', { feedBack: message })
+                req.flash("error", message);
+                return res.redirect("/getGenerateQuestionpaper/" + classId);
             }
-
 
             console.log("Generating Questiona Paper Complete!");
 
@@ -129,7 +153,7 @@ exports.generateQuestionPaper = (req, res, next) => {
             });
         })
         .catch(error => {
-            console.log(`Error Fetching Class : ${error.message}`);
+            console.log(`Error Generate Questions: ${error.message}`);
             message = "Opps! Something's wrong! Please try again later."
             res.render('noData', { feedBack : message })
         });
@@ -310,13 +334,13 @@ exports.listQuestionPaper = (req, res, next) => {
 
     QuestionPaper.find({ class: classId })
         .then(mQuestionPapers => {
-            if (!mQuestionPapers.length) {
+            if (mQuestionPapers.length <1) {
                 console.log("NO QuestionsPapers");
-                res.render('noData', {feedBack:"No QuestionPapers"})
+                return res.render('noData', {feedBack:"No QuestionPapers"})
             }
             // res.render('listQuestions', {
             //     mQuestions: mQuestions
-            // });
+            // })
 
             const QuestionPaparDetails = [' ']
             QuestionPaparDetails.length = 0;
@@ -337,7 +361,7 @@ exports.listQuestionPaper = (req, res, next) => {
                 QuestionPaparDetails.push(mQuestionDetails)
             }
 
-            res.render('listQuestionPapers', {
+            return res.render('listQuestionPapers', {
                 mQuestionPapers: QuestionPaparDetails,
                 errorMessage: mError,
                 okMessage: mOk
@@ -388,11 +412,12 @@ exports.viewQuestionPaper = (req, res, next) => {
 
 exports.deleteQuestionPaper = (req, res, next)=>{
 
-    const qpid = req.params.qpId;
+    const qpid = req.params.qpid;
     const classId = req.params.cid;
 
     QuestionPaper.findByIdAndDelete(qpid)
         .then(result => {
+            console.log("QuestioPaper Deleted!");
             req.flash('info', "QuestionPaper Deleted!")
             res.redirect('/listQuestionPapers/' + classId)
         }).catch(error => {

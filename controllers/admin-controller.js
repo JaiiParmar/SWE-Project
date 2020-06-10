@@ -159,9 +159,9 @@ exports.addProgram = (req, res, next) => {
 exports.updateProgram = (req, res, next) => {
     console.log("Post: Update Program !");
     const id = req.params.id
-    const name = req.body.pname
-    const duration = req.body.pduration
-    const active = req.body.pactive
+    const name = req.body.name
+    const duration = req.body.duration
+    const active = req.body.active
 
     Program.findByIdAndUpdate(id, {
         $set: {

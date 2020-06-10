@@ -17,11 +17,11 @@ exports.createValidationFor = (route)=> {
             ];
         case '/getShowProgram/updateProgram/:id':
             return[
-                check('pname').not().isEmpty().trim().escape().withMessage('Program name cannot be empty.')
+                check('name').not().isEmpty().trim().escape().withMessage('Program name cannot be empty.')
                 .isLength({min: 2}).withMessage('Program name must be of 2 or more character.'),
-                check('pduration').not().isEmpty().trim().escape().withMessage('Duration cannot be empty.')
+                check('duration').not().isEmpty().trim().escape().withMessage('Duration cannot be empty.')
                 .isNumeric().withMessage('Duration must be numberic value (Number of year)'),
-                check('pactive').not().isEmpty().trim().escape().withMessage('Active status can not be empty')
+                check('active').not().isEmpty().trim().escape().withMessage('Active status can not be empty')
                 .isIn(['true', 'false','TRUE','FLASE']).withMessage('Active status can be "true" or "false".')
             ];
         case '/addCourse':
@@ -98,15 +98,13 @@ exports.createValidationFor = (route)=> {
                 .isIn(['easy','medium','hard']).withMessage('Difficulty level of a question must be either easy, medium or hard'),
                 check('marks').not().isEmpty().trim().escape().withMessage('Question must have marks assigned.')
                 .isNumeric().withMessage('Marks must be numberic value'),
-                check('question').not().isEmpty().trim().escape().withMessage('Question text cannot be empty.'),
-                check('answer').not().isEmpty().trim().escape().withMessage('Answer cannot be empty.')
+                check('question').not().isEmpty().trim().escape().withMessage('Question text cannot be empty.')
             ];
         case '/updateQuestion/:questionId':
             return[
                 check('marks').not().isEmpty().trim().escape().withMessage('Question must have marks assigned.')
                 .isNumeric().withMessage('Marks must be numberic value'),
-                check('question').not().isEmpty().trim().escape().withMessage('Question text cannot be empty.'),
-                check('answer').not().isEmpty().trim().escape().withMessage('Answer cannot be empty.')
+                check('question').not().isEmpty().trim().escape().withMessage('Question text cannot be empty.')
             ];
     case '/findPublicQuestions':
         return[

@@ -276,11 +276,11 @@ body {
 
                     <div class="wrap-input1 validate-input">
 					<div class="sideleft validate-input" >
-					    <input class="input1" type="text" id="examDate" required name="examDate" placeholder="Exam Date- Format: dd-mm-yy" oninput="getDate()">
+					    <input class="input1" type="date" id="examDate" name="examDate" placeholder="Exam Date- Format: dd-mm-yy" oninput="getDate()">
 					    <span class="shadow-input1"></span>
 				    </div>
                         <div class="sideright validate-input" >
-                            <input class="input1" type="number" id="timeDuration" required name="timeDuration" placeholder="Time Duration - in Minutes" oninput="getTime()">
+                            <input class="input1" type="number" min="1" max="300" id="timeDuration" required name="timeDuration" placeholder="Time Duration - in Minutes" oninput="getTime()">
                             <span class="shadow-input1"></span>
 				        </div>
                 </div>
@@ -592,6 +592,9 @@ else { %>
       document.getElementById("printExam").innerHTML = x;
       //date
       //instruction
+    }
+    function curDate(){
+        return new Date();
     }
     </script>
 

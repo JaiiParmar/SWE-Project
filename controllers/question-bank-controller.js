@@ -146,7 +146,8 @@ exports.getListQuestions = (req, res, next) => {
     Question.find({class:classId})
         .then(mQuestions => {
             if (mQuestions.length < 1) {
-                res.render('noData', {
+                console.log("No Questions!");
+                return res.render('noData', {
                     feedBack: "No Questions!Please add Questions!"
                 })
             }
@@ -189,8 +190,8 @@ exports.getDetailsQuestions = (req, res, next) => {
             if (!mQuestion) {
                 console.log(mQuestion);
                 message = 'No Classes'
+                res.render("noData", { message: message });
             }
-            console.log(mQuestion);
             //find class and return topics
             Faculty.findById(facId)
                 .then(mClass => {
@@ -233,6 +234,8 @@ exports.updateQuestion = (req, res, next) => {
 
     const type = req.body.type;
     const mark = req.body.marks;
+    const topic = req.body.topic;
+    const difficulty = req.body.difficulty;
     const question = req.body.question;
     const note = req.body.note;
     const answer = req.body.answer;
@@ -270,6 +273,9 @@ exports.updateQuestion = (req, res, next) => {
             mark: mark,
             options: options,
             answer: answer,
+            type: type,
+            difficulty: difficulty,
+            topic:topic,
             public: isPublic,
         }
     })

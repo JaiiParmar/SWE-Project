@@ -31,17 +31,18 @@
 					</div>
 
 					<div class="wrap-input1 validate-input" >
-						<input class="input1" type="text" name="email" required placeholder="Student E-Mail">
+						<input class="input1"
+						pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" required name="email" placeholder="E-Mail: xyz@abc.com ">
 						<span class="shadow-input1"></span>
 					</div>
 
 					<div class="wrap-input1 validate-input"  >
-						<input class="input1" type="password" name="password" required placeholder="Password">
+						<input class="input1" type="password" minLenght=8 name="password"  minlength="8"  required placeholder="Password">
 						<span class="shadow-input1"></span>
 					</div>
 
 					<div class="wrap-input1 validate-input"  >
-						<input class="input1" type="text" name="batch" placeholder="Student Batch">
+						<input class="input1" type="number" name="batch" placeholder="Student Batch">
 						<span class="shadow-input1"></span>
 					</div>
 

@@ -74,6 +74,18 @@
 </style>
 
 <div align="center">
+  	<%	if (errorMessage) { %>
+		<div class="alert alert-danger alert-dismissible"  style=" text-align: center;">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<%= errorMessage %>
+		  </div>
+
+	<% } else if(okMessage){%>
+		<div class="alert alert-success alert-dismissible" style="width: 50%;text-align: center;;">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<%= okMessage %>
+							</div>
+						<%}%>
 <form class="contact1-form validate-form" action="/generateQuestionPaper/<%=mClass.classId%>" method="POST">
 				<span class="contact1-form-title">
 					Generate Question Paper
@@ -86,7 +98,7 @@
 	<div class=" wrap-input1 validate-input"  >
 	<div id="checkboxes">
 	<a href="#content" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
-		<label class="" data-toggle="collapse">Select Topics<div class="arrow"></div></label></a>
+		<label class="" data-toggle="collapse">Select Topics(DefaultAll)<div class="arrow"></div></label></a>
 			<ul id="content" class="collapse" data-parent="#sidebar-nav">
 				<% for(let i = 0; mClass.topics[i]; i++) {%>
 					<li><label  for="one">
@@ -100,7 +112,7 @@
   <div class=" wrap-input1 validate-input"  >
 	<div id="checkboxes">
 	<a href="#types" class="sidebar-nav-link selectBox"  style="color: #FFFFFF; text-decoration: none;">
-		<label class=""data-toggle="collapse">Select types oF Qustions <div class="arrow"></div></label></a>
+		<label class=""data-toggle="collapse">Select types oF Qustions(DefaultAll)<div class="arrow"></div></label></a>
 			<ul id="types"  data-parent="#sidebar-nav">
 					<li><label  for="one">
 					<input type="checkbox" name="mTypes" value="theory" id="one"/>Theory</label></li>
@@ -116,18 +128,17 @@
 	</div>
 
 				<div class="wrap-input1 validate-input"  >
-					<input class="input1" type="number" name="nEasy" placeholder="Number of Easy questions">
+					<input class="input1" type="number" name="nEasy" min=0 required placeholder="Number of Easy questions">
 					<span class="shadow-input1"></span>
 				</div>
 
 				<div class="wrap-input1 validate-input"  >
-					<input class="input1" type="number" name="nMedium" placeholder="Number of Medium questions">
+					<input class="input1" type="number" name="nMedium" min=0 mrequired placeholder="Number of Medium questions">
 					<span class="shadow-input1"></span>
 				</div>
 
-
 				<div class="wrap-input1 validate-input"  >
-					<input class="input1" type="number" name="nHard" placeholder="Number of Difficult questions">
+					<input class="input1" type="number" name="nHard" min=0 required  placeholder="Number of Difficult questions">
 					<span class="shadow-input1"></span>
 				</div>
 				<div class="container-contact1-form-btn">

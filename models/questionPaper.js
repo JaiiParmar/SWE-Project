@@ -15,7 +15,7 @@ const questionPaperSchema = new Schema({
     ref: "course",
   },
   class: {
-    type:String,
+    type:String,  
   },
   created_at: {
     type: Date,

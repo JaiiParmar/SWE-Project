@@ -59,7 +59,8 @@
 			<%for(let i = 0; locals.classes[i];i++){%>
 			 <li class="sidebar-nav-group">
                     <a href="#<%=locals.classes[i].program%><%=locals.classes[i].course%>" class="sidebar-nav-link" data-toggle="collapse"><i class="icon-note"></i><%=locals.classes[i].program%> - <%=locals.classes[i].course%></a>
-                    <ul id="<%=locals.classes[i].program%><%=locals.classes[i].course%>" class="collapse" data-parent="#sidebar-nav">
+					<ul id="<%=locals.classes[i].program%><%=locals.classes[i].course%>" class="collapse" data-parent="#sidebar-nav">
+						  <li><a href="/listTopics/<%=locals.classes[i]._id%>" class="sidebar-nav-link">Add/List Topics</a></li>
                         <li><a href="/getCreateQuestion/<%=locals.classes[i]._id%>" class="sidebar-nav-link">Add Questions</a></li>
                         <li><a href="/listQuestions/<%=locals.classes[i]._id%>" class="sidebar-nav-link">List Questions</a></li>
                         <li><a href="/getGenerateQuestionpaper/<%=locals.classes[i]._id%>" class="sidebar-nav-link">Generate Question-Paper</a></li>
