@@ -1,11 +1,13 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const config = {
   development: {
-    SECRET = "khkj#hkJ$783#7K!!hk72%@8463khjK7#",
-    DBLINK = "mongodb://localhost:27017/paper_generator"
+    DBLINK : process.env.DATABASE_D,
+    SECRET : process.env.MYSECRET
   },
   production: {
-    SECRET= process.env.MYSECRET,
-    DBLINK = process.env.DATABASE_URL
+    SECRET:process.env.MYSECRET,
+    DBLINK : process.env.DATABASE_URL
   },
 };
 module.exports = config;
