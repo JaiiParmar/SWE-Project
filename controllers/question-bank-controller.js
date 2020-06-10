@@ -245,6 +245,7 @@ exports.updateQuestion = (req, res, next) => {
     const op4 = req.body.option4;
     const options = [];
 
+
     let isPublic = false;
     if (req.body.public === "public" ) {
         isPublic = true;
@@ -273,7 +274,6 @@ exports.updateQuestion = (req, res, next) => {
             mark: mark,
             options: options,
             answer: answer,
-            type: type,
             difficulty: difficulty,
             topic:topic,
             public: isPublic,

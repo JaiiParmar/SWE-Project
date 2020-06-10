@@ -153,13 +153,14 @@ form{
                             <div class="row-1"></div>
                             <td><label for="code"><div class="col-sm-8"><h5><b>Type </b></h6></div></label></td>
                             <td>
-                                <select class="input1" name="type" onchange="showOption(this.value)" id="qType">
+                                 <input disabled class="input1" type="text" value="<%= mQuestion.type%>" name="type" placeholder="Course code" required>
+                                <!-- <select class="input1" name="type" value="<%= mQuestion.type%>"> id="qType">
                                     <option value="<%= mQuestion.type%>">Select Question Type</option>
                                     <option value="theory" <% var selected = (mQuestion.type == "theory" ) ? "selected" : ""; %> <%= selected %>>Theory</option>
                                     <option value="mcq" <% var selected = (mQuestion.type == "mcq" ) ? "selected" : ""; %> <%= selected %>>MCQ</option>
                                     <option value="true/false" <% var selected = (mQuestion.type == "true/false" ) ? "selected" : ""; %> <%= selected %>>True/False</option>
                                     <option value="yes/no" <% var selected = (mQuestion.type == "yes/no" ) ? "selected" : ""; %> <%= selected %>>Yes/No</option>
-                                </select>
+                                </select> -->
                                 </div>
                         </tr>
                         <% if(mQuestion.type === 'mcq'){ %>
@@ -223,3 +224,14 @@ form{
         </div>
     </div>
 </div>
+
+
+
+<script type="text/javascript">
+	function showOption(selected) {
+
+		if (selected == 'mcq'){document.getElementById("opt").style.display = "block";}
+		else{document.getElementById("opt").style.display = "none";}
+	}
+	showOption('');
+</script>
