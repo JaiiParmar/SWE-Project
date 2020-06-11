@@ -92,7 +92,7 @@
 				</span>
           <hr>
           <span class="contact1-form-title">
-					Select Constrains for the Questions
+					Select Constraints for the Questions
 				</span>
 
 	<div class=" wrap-input1 validate-input"  >
@@ -101,8 +101,8 @@
 		<label class="" data-toggle="collapse">Select Topics(DefaultAll)<div class="arrow"></div></label></a>
 			<ul id="content" class="collapse" data-parent="#sidebar-nav">
 				<% for(let i = 0; mClass.topics[i]; i++) {%>
-					<li><label  for="one">
-          <input type="checkbox" name="mTopics" value="<%= mClass.topics[i]%>" id="one"/><%= mClass.topics[i]%></label></li>
+					<li><label >
+          <input type="checkbox" name="mTopics" value="<%= mClass.topics[i]%>" /><%= mClass.topics[i]%></label></li>
           <input type="hidden" value="<%= mClass.topics[i]%>" name="allTopics">
 				<%}%>
 			</ul>
@@ -111,17 +111,17 @@
 
   <div class=" wrap-input1 validate-input"  >
 	<div id="checkboxes">
-	<a href="#types" class="sidebar-nav-link selectBox"  style="color: #FFFFFF; text-decoration: none;">
-		<label class=""data-toggle="collapse">Select types oF Qustions(DefaultAll)<div class="arrow"></div></label></a>
-			<ul id="types"  data-parent="#sidebar-nav">
-					<li><label  for="one">
-					<input type="checkbox" name="mTypes" value="theory" id="one"/>Theory</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mTypes" value="mcq" id="one"/>MCQ</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mTypes" value="true/false" id="one"/>True/False</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mTypes" value="yes/no" id="one"/>Yes/No</label></li>
+	<a href="#types" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
+		<label class="" data-toggle="collapse">Select types oF Qustions(DefaultAll)<div class="arrow"></div></label></a>
+			<ul id="types" class="collapse" data-parent="#sidebar-nav">
+					<li><label  >
+					<input type="checkbox" name="mTypes" value="theory" />Theory</label></li>
+          <li><label >
+					<input type="checkbox" name="mTypes" value="mcq" />MCQ</label></li>
+          <li><label  >
+					<input type="checkbox" name="mTypes" value="true/false" />True/False</label></li>
+          <li><label >
+					<input type="checkbox" name="mTypes" value="yes/no"/>Yes/No</label></li>
 
 			</ul>
 				<span class="shadow-input1"></span>
@@ -152,9 +152,9 @@
 			</form>
 			</div>
 </div></div></div>
-<script>
-	var expanded = false;
 
+<script>
+var expanded = false;
 function showCheckboxes() {
   var checkboxes = document.getElementById("checkboxes");
   if (!expanded) {

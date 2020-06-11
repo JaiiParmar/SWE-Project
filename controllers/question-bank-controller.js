@@ -335,7 +335,7 @@ exports.getPublicQuestionForStudents = (req, res, next) => {
     })
         .then(mQuestions => {
             if (mQuestions.length < 1) {
-                res.render('noData', {
+                return res.render('noData', {
                     feedBack: "No Questions!"
                 })
             }

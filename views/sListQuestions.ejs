@@ -80,7 +80,7 @@
 				</span>
           <hr>
           <span class="contact1-form-title">
-					Select Constrains for the Questions
+					Select Constraints for the Questions
           </span>
  <div class=" wrap-input1 validate-input"  >
     <select class="input1" name="faculty" required>
@@ -92,7 +92,7 @@
     </div>
     <span class="shadow-input1"></span>
 
-    <div class=" wrap-input1 validate-input"  >
+    <div class="wrap-input1 validate-input"  >
     <select class="input1" name="program" required>
         <option value="">Select Program</option>
          <% for(var i=0; i < programs.length; i++) {  %>
@@ -101,10 +101,9 @@
         </select>
     </div>
     <span class="shadow-input1"></span>
-
-     <div class=" wrap-input1 validate-input"  >
-    <select class="input1" name="course" required>
-        <option>Select Course</option>
+     <div class="wrap-input1 validate-input"  >
+    <select class="input1" required name="course">
+        <option value="">Select Course</option>
          <% for(var i=0; i < courses.length; i++) {  %>
              <option value="<%=courses[i]._id%>"><%= courses[i]._id%></option>
          <% } %>
@@ -112,19 +111,19 @@
     </div>
     <span class="shadow-input1"></span>
 
-  <div class=" wrap-input1 validate-input"  >
+  <div class="wrap-input1 validate-input"  >
 	<div id="checkboxes">
 	<a href="#types" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
-		<label class="" data-toggle="collapse">Select types of Qustion <div class="arrow"></div></label></a>
+		<label class="" data-toggle="collapse">Select types of Qustion(Default-All) <div class="arrow"></div></label></a>
 			<ul id="types" class="collapse" data-parent="#sidebar-nav">
-					<li><label  for="one">
-					<input type="checkbox" name="mTypes" value="theory" id="one"/>Theory</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mTypes" value="mcq" id="one"/>MCQ</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mTypes" value="true/false" id="one"/>True/False</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mTypes" value="yes/no" id="one"/>Yes/No</label></li>
+					<li><label>
+					<input type="checkbox" name="mTypes" value="theory" />Theory</label></li>
+          <li><label>
+					<input type="checkbox" name="mTypes" value="mcq" />MCQ</label></li>
+          <li><label>
+					<input type="checkbox" name="mTypes" value="true/false" />True/False</label></li>
+          <li><label>
+					<input type="checkbox" name="mTypes" value="yes/no" />Yes/No</label></li>
 
 			</ul>
 				<span class="shadow-input1"></span>
@@ -133,14 +132,14 @@
     <div class=" wrap-input1 validate-input"  >
 	<div id="checkboxes">
 	<a href="#diff" class="sidebar-nav-link selectBox" data-toggle="collapse" style="color: #FFFFFF; text-decoration: none;">
-		<label class="" data-toggle="collapse">Select Difficutly Level<div class="arrow"></div></label></a>
+		<label class="" data-toggle="collapse">Select Difficutly Level(Default-All)<div class="arrow"></div></label></a>
 			<ul id="diff" class="collapse" data-parent="#sidebar-nav">
-					<li><label  for="one">
-					<input type="checkbox" name="mDiff" value="easy" id="one"/>Easy</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mDiff" value="medium" id="one"/>Medium</label></li>
-          <li><label  for="one">
-					<input type="checkbox" name="mDiff" value="hard" id="one"/>Hard</label></li>
+					<li><label>
+					<input type="checkbox" name="mDiff" value="easy" />Easy</label></li>
+          <li><label  >
+					<input type="checkbox" name="mDiff" value="medium" />Medium</label></li>
+          <li><label>
+					<input type="checkbox" name="mDiff" value="hard"/>Hard</label></li>
           	</ul>
 				<span class="shadow-input1"></span>
 	</div>
@@ -155,6 +154,7 @@
 			</form>
 			</div>
 </div></div></div>
+
 <script>
 	var expanded = false;
 
