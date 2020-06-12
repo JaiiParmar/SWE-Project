@@ -172,7 +172,7 @@ exports.resetPassword = (req, res, next) => {
           text: "Follow the link to reset your password!",
           html: `
           <h4>You requested a password reset</h4><br>
-          <h4>Click this <a href="http://localhost:5000/getNewPassword/${token}">link</a> to set a new password</h4>
+          <h4>Click this <a href="${config.MHOME}/getNewPassword/${token}">link</a> to set a new password</h4>
           `,
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {
