@@ -1,8 +1,12 @@
 const crypto = require('crypto')
+const nodemailer = require('nodemailer');
 
-const bcrypt = require("bcryptjs"); //for enrypting the password
+const bcrypt = require("bcryptjs");     //for enrypting the password
 const User = require("../models/user");
 const Faculty = require('../models/faculty')
+
+const env = process.env.NODE_ENV || "development";
+const config = require("../config")[env];
 
 //render the login.ejs page.
 exports.getLogin = (req, res, next) => {
@@ -153,37 +157,37 @@ exports.resetPassword = (req, res, next) => {
       })
       .then((result) => {
 
-        res.redirect('/getNewPassword/' + token)
-
         //**Mailing Service. */
-        // const smtpTransport = nodemailer.createTransport({
-        //     service: 'gmail',
-        //     auth: {
-        //         user: "*****20@gmail.com", //sender's Id and password
-        //         pass: "*****@123"
-        //     }
-        // });
-        // const mailOptions = {
-        //     from: "mooseparmar20@gmail.com",
-        //     to: id,                                        //receiver's id.
-        //     subject: "Password Reset!",
-        //     text: "Follow the link to  reset your password!",
-        //     html: `
-        // <p>You requested a password reset</p><br>
-        // <p>Click this <a href="http://localhost:5000/getNewPassword/${token}">link</a> to set a new  password</p>
-        //`
-        // }
-        // smtpTransport.sendMail(mailOptions, function (error, response) {
-        //     if (error) {
-        //         console.log(error);
-        // req.flash("error", "Coundn't send the mail!")
-        // res.redirect('/getForgotPassword')
-        //     } else {
-        //         console.log('email sent to : ' + id);
-        // req.flash("info", "Mail sent! Please check your inbox!")
-        // res.redirect('/getForgotPassword')
-        //     }
-        // });
+        const smtpTransport = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: config.GMAIL,
+            pass: config.GPASSWORD,
+          },
+        });
+        const mailOptions = {
+          from: config.GMAIL,
+          to: id, //receiver's id.
+          subject: "DA-EX-LAB Password Reset!",
+          text: "Follow the link to reset your password!",
+          html: `
+          <h4>You requested a password reset</h4><br>
+          <h4>Click this <a href="http://localhost:5000/getNewPassword/${token}">link</a> to set a new password</h4>
+          `,
+        };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+            if (error) {
+                console.log(error);
+        req.flash("error", "Coundn't send the mail!")
+        res.redirect('/getForgotPassword')
+            } else {
+                console.log('email sent to : ' + id);
+        req.flash("info", "Mail sent! Please check your inbox!")
+        res.redirect('/getForgotPassword')
+            }
+        });
+
+       // res.redirect('/getNewPassword/' + token)
       })
       .catch((err) => {
         console.log(err);

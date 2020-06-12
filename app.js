@@ -15,8 +15,8 @@ const facultyRoutes = require('./routes/faculty');
 const studentRoutes = require('./routes/student')
 const errorController = require('./controllers/error')
 
-let env = process.env.NODE_ENV || 'development';
-let config = require('./config')[env];
+const env = process.env.NODE_ENV || 'development';
+const config = require('./config')[env];
 
 
 //const csrf = require("csurf");

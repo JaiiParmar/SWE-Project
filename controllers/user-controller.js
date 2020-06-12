@@ -1,21 +1,29 @@
 const bcrypt = require("bcryptjs");
-
-
+const generator = require("generate-password");
+const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const Faculty = require('../models/faculty');
 const Student = require('../models/student');
 const Question = require("../models/question");
 
+const env = process.env.NODE_ENV || "development";
+const config = require("../config")[env];
 
 // Add faculty and send email.
 exports.addUser = (req, res, next) => {
     //const confirmPassword = req.body.confirmPassword;
     const id = req.body.email
-    const password = req.body.password
     const name = req.body.name
     const role = req.body.role
+    //for student only
     const program = req.params.pid
     const batch = req.body.batch
+
+   const passwords = generator.generate({   //generate random password.
+     length: 10,
+       numbers: true,
+   });
+    console.log(passwords);
 
     User.findOne({ _id: id })
         .then((userDoc) => {
@@ -30,80 +38,77 @@ exports.addUser = (req, res, next) => {
                     return res.redirect('/getAddStudent/' + program)
             }
             return bcrypt
-                .hash(password, 12)
-                .then((hashedPassword) => {
-                    const user = new User({
-                        _id: id,
-                        password: hashedPassword,
-                        role: role,
-                        name: name
+              .hash(passwords, 12)
+              .then((hashedPassword) => {
+                const user = new User({
+                  _id: id,
+                  password: hashedPassword,
+                  role: role,
+                  name: name,
+                });
+                if (role === "faculty") {
+                  //add reference to facutly
+                  Faculty({ _id: id })
+                    .save()
+                    .catch((err) => {
+                      console.log(err);
+                      req.flash(
+                        "error",
+                        "Couldn't add faculty! Please try again!"
+                      );
+                      return res.redirect("/getAddFaculty");
                     });
-                    if (role === 'faculty') {
-                        //add reference to facutly
-                        Faculty({ _id: id })
-                            .save().catch((err) => {
-                                console.log(err);
-                                req.flash(
-                                    "error",
-                                    "Couldn't add faculty! Please try again!"
-                                );
-                                return res.redirect('/getAddFaculty')
-                            })
-                    }
-                    else if (role === 'student') {
-                        //add reference to facutly
-                        Student({ _id: id, program:program, batch:batch})
-                            .save().catch((err) => {
-                                console.log(err);
-                                req.flash(
-                                    "error",
-                                    "Couldn't add student! Please try again!"
-                                );
-                                return res.redirect('/getAddStudent/' + program)
-                            })
-                    }
-                    return user.save();
-                })
-                .then((result) => {
+                } else if (role === "student") {
+                  //add reference to facutly
+                  Student({ _id: id, program: program, batch: batch })
+                    .save()
+                    .catch((err) => {
+                      console.log(err);
+                      req.flash(
+                        "error",
+                        "Couldn't add student! Please try again!"
+                      );
+                      return res.redirect("/getAddStudent/" + program);
+                    });
+                }
+                return user.save();
+              })
+              .then((result) => {
+                /**Mailing Service. */
+                const smtpTransport = nodemailer.createTransport({
+                  service: "gmail",
+                  auth: {
+                    user: config.GMAIL,
+                    pass: config.GPASSWORD,
+                  },
+                });
+                const mailOptions = {
+                  from: config.GMAIL,
+                  to: id,
+                  subject: "DA-EX-LAB Account Registerd!",
+                  text:
+                    "Your account has been registered! Use given password to login!",
+                  html: `
+                        <h4>Your account has been registered! Use given password to login!</h4>
+                        <br>
+                        <h3>Password : ${passwords}. </h3>`,
+                };
+                smtpTransport.sendMail(mailOptions, function (error, response) {
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    console.log("email sent to : " + id);
+                  }
+                });
 
-                    //**Mailing Service. */
-                    // const smtpTransport = nodemailer.createTransport({
-                    //     service: 'gmail',
-                    //     auth: {
-                    //         user: "*****20@gmail.com",
-                    //         pass: "*****@123"
-                    //     }
-                    // });
-                    // const mailOptions = {
-                    //     from: "mooseparmar20@gmail.com",
-                    //     to: id,
-                    //     subject: "Account Registerd!",
-                    //     text: "Your account has been registered! Use given password to login!",
-                    //     html: "<h5>Password :" + password + " .</h5>"
-                    // }
-                    // smtpTransport.sendMail(mailOptions, function (error, response) {
-                    //     if (error) {
-                    //         console.log(error);
-                    //     } else {
-                    //         console.log('email sent to : ' + id);
-                    //     }
-                    // });
-
-                    if (role === 'faculty') {
-                        req.flash(
-                            "info",
-                            "Faculty Added!"
-                        );
-                        res.redirect("/getAddFaculty");
-                    }
-                    else {
-                        req.flash(
-                            "info",
-                            "Student Added!"
-                        );
-                        res.redirect('/getAddStudent/' + program)
-                    }
-                })
+                if (role === "faculty") {
+                  req.flash("info", "Faculty Added!");
+                  res.redirect("/getAddFaculty");
+                } else {
+                  req.flash("info", "Student Added!");
+                  res.redirect("/getAddStudent/" + program);
+                }
+              });
         })
         .catch((err) => {
             console.log(err);

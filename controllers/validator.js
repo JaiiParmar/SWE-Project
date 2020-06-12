@@ -44,7 +44,6 @@ exports.createValidationFor = (route)=> {
                 check('name').not().isEmpty().trim().escape().withMessage('Name cannot be empty.')
                 .isLength({min: 3}).withMessage('Name must be of atleast 3 characters.')
                 .isLength({max: 50}).withMessage('Name must can be atmost of 50 charcters'),
-                check('password').not().isEmpty().trim().escape().withMessage('Password cannot be empty'),
                 check('email').isEmail().normalizeEmail().withMessage('Invalid email address.'),
                 check('role').not().isEmpty().trim().escape()
                 .isIn(['faculty']).withMessage('You cannot change role of user')

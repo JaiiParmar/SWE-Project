@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-        "start": "node app.js",
+    "start": "nodemon app.js",
     "dev": "nodemon app.js"
   },
   "keywords": [],
@@ -22,7 +22,9 @@
     "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.17.1",
     "express-validator": "^6.5.0",
+    "generate-password": "^1.5.1",
     "mongoose": "^5.9.7",
+    "nodemailer": "^6.4.8",
     "session": "^0.1.0"
   },
   "devDependencies": {
