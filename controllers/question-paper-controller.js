@@ -3,8 +3,6 @@ const Faculty  = require("../models/faculty")
 const QuestionPaper = require("../models/questionPaper");
 const Cache = require('../models/cacheQuestions');
 
-
-
 exports.getGenerateQuestionPaper = (req, res, next) => {
     let message = null;
     const id = req.user._id;
@@ -90,8 +88,12 @@ exports.generateQuestionPaper = (req, res, next) => {
         );
         return res.redirect("/getGenerateQuestionpaper/" + classId);
     }
-
-    Question.find({ class: classId, topic: { $in: topics }, type: { $in: types } })
+    Question.find({
+        class: classId,
+        topic: { $in: topics },
+        type: { $in: types },
+        public: false,
+    })
         .then(mQuestions => {
 
             if (!mQuestions) {
@@ -101,6 +103,7 @@ exports.generateQuestionPaper = (req, res, next) => {
 
             const randomizedQuestions = [mQuestions[0]]
             randomizedQuestions.length = 0;
+
             //Randomize
             for (let i in mQuestions) {
                 let randomIndex = Math.floor(Math.random() * mQuestions.length);
@@ -109,8 +112,9 @@ exports.generateQuestionPaper = (req, res, next) => {
                 }
                 randomizedQuestions[i] = mQuestions[randomIndex];
             }
-            //An array to store final question that meets with the requirements...
 
+
+            //An array to store final question that meets with the requirements...
             const finalQuestions = [mQuestions[0]]
             finalQuestions.length = 0;
 
@@ -326,8 +330,6 @@ exports.listQuestionPaper = (req, res, next) => {
     else {
         mError = mOk = null
     }
-
-
 
     let message = null;
     const classId = req.params.classId;

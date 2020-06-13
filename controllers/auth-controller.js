@@ -1,6 +1,5 @@
 const crypto = require('crypto')
 const nodemailer = require('nodemailer');
-
 const bcrypt = require("bcryptjs");     //for enrypting the password
 const User = require("../models/user");
 const Faculty = require('../models/faculty')
@@ -40,6 +39,8 @@ exports.getLogin = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+
+
   User.findOne({ _id: email })
     .then((user) => {
       if (!user) {
